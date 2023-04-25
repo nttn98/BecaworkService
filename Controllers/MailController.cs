@@ -17,13 +17,13 @@ namespace BecaworkService.Controllers
         {
             _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
         }
-        
+
         //Get Mail
         [HttpGet]
         [Route("GetMails")]
-        public async Task<IActionResult> GetMails()
+        public async Task<IActionResult> GetMails(int page, int pageSize)
         {
-            var mails = await _mailService.GetMails();
+            var mails = await _mailService.GetMails(page, pageSize);
             return Ok(mails);
         }
 

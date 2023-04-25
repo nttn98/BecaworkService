@@ -19,8 +19,21 @@ namespace BecaworkService.Services
         }
         public async Task<IEnumerable<Mail>> GetMails(int page, int pageSize)
         {
-            var mails = _context.Mails.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-            return mails;
+            if (page == 0 && pageSize == 0 || pageSize == 0)
+            {
+                var mails = await _context.Mails.ToListAsync();
+                return mails;
+            }
+            else if (page == 0)
+            {
+                var mails = _context.Mails.ToList().Take(pageSize);
+                return mails;
+            }
+            else
+            {
+                var mails = _context.Mails.ToList().Skip((page - 1) * pageSize).Take(pageSize);
+                return mails;
+            }
 
         }
         public async Task<Mail> GetMailByID(long ID)

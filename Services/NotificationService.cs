@@ -4,6 +4,7 @@ using BecaworkService.Respository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Services
@@ -16,9 +17,23 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<IEnumerable<Notification>> GetNotifications()
+        public async Task<IEnumerable<Notification>> GetNotifications(int page, int pageSize)
         {
-            return await _context.Notifications.ToListAsync();
+            if (page == 0 && pageSize == 0 || pageSize == 0)
+            {
+                var notifications = await _context.Notifications.ToListAsync();
+                return notifications;
+            }
+            else if (page == 0)
+            {
+                var notifications = _context.Notifications.ToList().Take(pageSize);
+                return notifications;
+            }
+            else
+            {
+                var notifications = _context.Notifications.ToList().Skip((page - 1) * pageSize).Take(pageSize);
+                return notifications;
+            }
         }
 
         public async Task<Notification> GetNotificationByID(long ID)

@@ -1,4 +1,5 @@
 using BecaworkService.Interfaces;
+using BecaworkService.Models;
 using BecaworkService.Respository;
 using BecaworkService.Services;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +31,7 @@ namespace BecaworkService
             services.AddControllersWithViews();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IFCMTokenLogService, FCMTokenLogService>();
             services.AddDbContext<BecaworkDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // In production, the React files will be served from this directory
@@ -43,6 +45,7 @@ namespace BecaworkService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CO3.Message", Version = "v1" });
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
+
             //Enable CORS
             services.AddCors(
                 c =>
@@ -82,7 +85,7 @@ namespace BecaworkService
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
-
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
