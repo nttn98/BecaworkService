@@ -44,17 +44,6 @@ const AppLayout: FC<Props> = (props) => {
           />
         </Sider>
         <Layout className="site-layout">
-          {/* <Header className="site-layout-background" style={{ padding: 0 }}>
-            {collapsed ? (
-              <Button
-                icon={<SidebarLeftOutlined size={24} onClick={() => {}} />}
-              />
-            ) : (
-              <Button
-                icon={<SidebarLeftOutlined size={24} onClick={() => {}} />}
-              />
-            )}
-          </Header> */}
           <Content
             className="site-layout-background"
             style={{
