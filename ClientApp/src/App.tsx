@@ -2,12 +2,17 @@ import * as React from "react";
 import "./custom.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
-import { HomePage } from "./pages/Home/HomePage";
+import Home from "./components/Home";
+import NotificationPage from "./pages/Home/NotificationPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <Home />,
+  },
+  {
+    path: "notification-page",
+    element: <NotificationPage />,
   },
 ]);
 

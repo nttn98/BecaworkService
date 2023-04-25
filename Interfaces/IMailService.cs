@@ -6,7 +6,7 @@ namespace BecaworkService.Interfaces
 {
     public interface IMailService
     {
-        Task<IEnumerable<Mail>> GetMails(int page, int pageSize);
+        Task<IEnumerable<Mail>> GetMails();
 
         Task<Mail> GetMailByID(long ID);
         Task<Mail> AddMail(Mail objMail);

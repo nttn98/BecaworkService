@@ -7,7 +7,9 @@ import {
   SidebarLeftOutlined,
   SidebarRightOutlined,
 } from "bu2-sax-icons";
-import { HomePage } from "../pages/Home/HomePage";
+import Home from "./Home";
+import NotificationPage from "../pages/Home/NotificationPage";
+import { Link } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
@@ -31,18 +33,18 @@ const AppLayout: FC<Props> = (props) => {
               {
                 key: "1",
                 icon: <Home1Outlined />,
-                label: "Home",
+                label: <a href="/">Home</a>,
               },
               {
+                label: <a href="/notification-page">Notification</a>,
                 key: "2",
                 icon: <UserOutlined />,
-                label: "User",
               },
             ]}
           />
         </Sider>
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }}>
+          {/* <Header className="site-layout-background" style={{ padding: 0 }}>
             {collapsed ? (
               <Button
                 icon={<SidebarLeftOutlined size={24} onClick={() => {}} />}
@@ -52,7 +54,7 @@ const AppLayout: FC<Props> = (props) => {
                 icon={<SidebarLeftOutlined size={24} onClick={() => {}} />}
               />
             )}
-          </Header>
+          </Header> */}
           <Content
             className="site-layout-background"
             style={{
@@ -61,7 +63,7 @@ const AppLayout: FC<Props> = (props) => {
               minHeight: 280,
             }}
           >
-            {<HomePage />}
+            {props.children}
           </Content>
         </Layout>
       </Layout>
