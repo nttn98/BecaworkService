@@ -11,7 +11,7 @@ namespace BecaworkService.Respository
         public DbSet<Mail> Mails { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<FCMTokenLog> FCMTokenLogs { get; set; }
-
+        public DbSet<FCMToken> FCMTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.LogTo(Console.WriteLine);
