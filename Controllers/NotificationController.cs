@@ -19,9 +19,9 @@ namespace BecaworkService.Controllers
 
         [HttpGet]
         [Route("GetNotifications")]
-        public async Task<IActionResult> GetNotifications()
+        public async Task<IActionResult> GetNotifications(int page, int pageSize)
         {
-            var tempNotifi = await _notificationService.GetNotifications();
+            var tempNotifi = await _notificationService.GetNotifications(page, pageSize);
             return Ok(tempNotifi);
         }
 

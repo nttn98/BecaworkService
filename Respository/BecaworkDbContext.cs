@@ -10,6 +10,8 @@ namespace BecaworkService.Respository
         public BecaworkDbContext(DbContextOptions<BecaworkDbContext> options) : base(options) { }
         public DbSet<Mail> Mails { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<FCMTokenLog> FCMTokenLogs { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.LogTo(Console.WriteLine);
@@ -21,6 +23,7 @@ namespace BecaworkService.Respository
             }
             builder.Entity<Mail>().ToTable("Mail");
             builder.Entity<Notification>().ToTable("Notification");
+            builder.Entity<FCMTokenLog>().ToTable("FCMTokenLog");
         }
     }
 }
