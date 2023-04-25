@@ -1,16 +1,23 @@
-import * as React from 'react';
-import { Route } from 'react-router';
-import Layout from './components/Layout';
-import Home from './components/Home';
-import Counter from './components/Counter';
-import FetchData from './components/FetchData';
+import * as React from "react";
+import "./custom.css";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./components/Home";
+import NotificationPage from "./pages/Home/NotificationPage";
 
-import './custom.css'
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "notification-page",
+    element: <NotificationPage />,
+  },
+]);
 
 export default () => (
-    <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-    </Layout>
+  <Layout>
+    <RouterProvider router={router} />
+  </Layout>
 );

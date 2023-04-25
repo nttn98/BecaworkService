@@ -70,5 +70,10 @@ namespace BecaworkService.Services
             }
             return result;
         }
+
+        public Task<IEnumerable<Mail>> GetMails()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
