@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Services
@@ -24,11 +25,6 @@ namespace BecaworkService.Services
                 var mails = await _context.Mails.ToListAsync();
                 return mails;
             }
-            else if (page == 0)
-            {
-                var mails = _context.Mails.ToList().Take(pageSize);
-                return mails;
-            }
             else
             {
                 var mails = _context.Mails.ToList().Skip((page - 1) * pageSize).Take(pageSize);
@@ -36,6 +32,92 @@ namespace BecaworkService.Services
             }
 
         }
+
+        public async Task<IEnumerable<Mail>> GetMails2(QueryParams queryParams)
+        {
+            var columnsMap = new Dictionary<string, Expression<Func<Mail, object>>>()
+            {
+                ["id"] = s => s.ID,
+                ["email"] = s => s.Email,
+                ["emailContent"] = s => s.EmailContent,
+                ["fileattach"] = s => s.FileAttach,
+                ["createby"] = s => s.CreateBy,
+                ["createTime"] = s => s.CreateTime,
+                ["issend"] = s => s.IsSend,
+                ["sendtime"] = s => s.SendTime,
+                ["subject"] = s => s.Subject,
+                ["sentstatus"] = s => s.SentStatus,
+                ["emailcc"] = s => s.EmailCC,
+                ["emailbcc"] = s => s.EmailBCC,
+                ["fromdate"] = s => s.FromDate,
+                ["todate"] = s => s.ToDate,
+                ["location"] = s => s.Location,
+                ["mailtype"] = s => s.MailType,
+                ["organizer"] = s => s.Organizer,
+                ["organizermail"] = s => s.OrganizerMail,
+                ["uid"] = s => s.UID
+            };
+
+            var mails = new List<Mail>();
+
+            if (!string.IsNullOrEmpty(queryParams.Content))
+            {
+                mails = await _context.Mails.Where(x => x.Subject.Contains(queryParams.Content)).ToListAsync();
+            }
+            else
+            {
+                mails = await _context.Mails.ToListAsync();
+            }
+
+            var file = await _context.Mails.OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
+            
+            return file;
+
+        }
+
+
+
+        /* public async Task<IEnumerable<Mail>> GetMails2(QueryParams queryParams)
+         {
+             var mails = new List<Mail>();
+
+             if (!string.IsNullOrEmpty(queryParams.Content))
+             {
+                 mails = await _context.Mails.Where(x => x.Subject.Contains(queryParams.Content)).ToListAsync();
+             }
+             else
+             {
+                 mails = await _context.Mails.ToListAsync();
+             }
+
+             if (queryParams.SortBy == "CreateBy")
+             {
+                 if (queryParams.IsSortAscending)
+                 {
+                     mails = mails.OrderBy(x => x.CreateBy).ToList();
+
+                 }
+                 else
+                 {
+                     mails = mails.OrderByDescending(x => x.CreateBy).ToList();
+                 }
+             }
+             else
+             {
+                 mails = await _context.Mails.ToListAsync();
+             }
+
+             if (queryParams.Page == 0 && queryParams.PageSize == 0 || queryParams.PageSize == 0)
+             {
+                 return mails;
+             }
+             else
+             {
+                 mails = mails.ToList().Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
+                 return mails;
+             }
+         }*/
+
         public async Task<Mail> GetMailByID(long ID)
         {
             var tempMail = await _context.Mails.FindAsync(ID);
@@ -69,11 +151,6 @@ namespace BecaworkService.Services
                 result = false;
             }
             return result;
-        }
-
-        public Task<IEnumerable<Mail>> GetMails()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BecaworkService.Interfaces;
 using BecaworkService.Models;
+using BecaworkService.Respository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,7 +10,7 @@ namespace BecaworkService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MailController : ControllerBase
+    public class MailController : Controller
     {
         public readonly IMailService _mailService;
 
@@ -26,6 +27,15 @@ namespace BecaworkService.Controllers
             var mails = await _mailService.GetMails(page, pageSize);
             return Ok(mails);
         }
+        
+        //Get Mail v2
+        [HttpGet]
+        [Route("GetMails2")]
+        public async Task<IActionResult> GetMails2(QueryParams queryParams)
+        {
+            var mails = await _mailService.GetMails2(queryParams);
+            return Ok(mails);
+        }
 
         //Get Mail by ID
         [HttpGet]
@@ -39,7 +49,7 @@ namespace BecaworkService.Controllers
         //Add Mail
         [HttpPost]
         [Route("AddMail")]
-        public async Task<IActionResult> Post(Mail mail)
+        public async Task<IActionResult> AddMail(Mail mail)
         {
             var tempMail = await _mailService.AddMail(mail);
             if (tempMail.ID == 0)
@@ -52,7 +62,7 @@ namespace BecaworkService.Controllers
         //Update Mail
         [HttpPut]
         [Route("UpdateMail")]
-        public async Task<IActionResult> Put(Mail mail)
+        public async Task<IActionResult> UpdateMail(Mail mail)
         {
             await _mailService.UpdateMail(mail);
             return Ok("Update Mail Successfully");
