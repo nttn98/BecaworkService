@@ -58,20 +58,19 @@ namespace BecaworkService.Services
                 ["uid"] = s => s.UID
             };
 
-            var mails = new List<Mail>();
+            var file = _context.Mails
+                .Where(x => !string.IsNullOrEmpty(queryParams.Content) || (x.Subject.Contains(queryParams.Content) || x.SentStatus.Contains(queryParams.Content)))
+                .OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
 
-            if (!string.IsNullOrEmpty(queryParams.Content))
+            if (queryParams.Page == 0 && queryParams.PageSize == 0 || queryParams.PageSize == 0)
             {
-                mails = await _context.Mails.Where(x => x.Subject.Contains(queryParams.Content)).ToListAsync();
+                return file;
             }
             else
             {
-                mails = await _context.Mails.ToListAsync();
+                file = file.ToList().Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
+                return file;
             }
-
-            var file = await _context.Mails.OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
-            
-            return file;
 
         }
 
