@@ -35,87 +35,164 @@ namespace BecaworkService.Services
 
         public async Task<IEnumerable<Mail>> GetMails2(QueryParams queryParams)
         {
+            var mails = new List<Mail>();
+
             var columnsMap = new Dictionary<string, Expression<Func<Mail, object>>>()
             {
                 ["id"] = s => s.ID,
                 ["email"] = s => s.Email,
-                ["emailContent"] = s => s.EmailContent,
+                ["emailcontent"] = s => s.EmailContent,
                 ["fileattach"] = s => s.FileAttach,
                 ["createby"] = s => s.CreateBy,
-                ["createTime"] = s => s.CreateTime,
                 ["issend"] = s => s.IsSend,
-                ["sendtime"] = s => s.SendTime,
                 ["subject"] = s => s.Subject,
                 ["sentstatus"] = s => s.SentStatus,
                 ["emailcc"] = s => s.EmailCC,
                 ["emailbcc"] = s => s.EmailBCC,
-                ["fromdate"] = s => s.FromDate,
-                ["todate"] = s => s.ToDate,
                 ["location"] = s => s.Location,
                 ["mailtype"] = s => s.MailType,
                 ["organizer"] = s => s.Organizer,
                 ["organizermail"] = s => s.OrganizerMail,
-                ["uid"] = s => s.UID
+                ["createtime"] = s => s.CreateTime
             };
 
-            var file = _context.Mails
-                .Where(x => !string.IsNullOrEmpty(queryParams.Content) || (x.Subject.Contains(queryParams.Content) || x.SentStatus.Contains(queryParams.Content)))
-                .OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
-
-            if (queryParams.Page == 0 && queryParams.PageSize == 0 || queryParams.PageSize == 0)
+            if (queryParams.SortBy == null || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
             {
-                return file;
-            }
-            else
-            {
-                file = file.ToList().Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
-                return file;
+                queryParams.SortBy = "createtime";
             }
 
+            if (queryParams.PageSize == 0)
+            {
+                queryParams.PageSize = 50;
+            }
+
+            if (queryParams.FromDate == null || queryParams.ToDate == null)
+            {
+                if (!string.IsNullOrEmpty(queryParams.Content)) // have content
+                {
+                    if (queryParams.IsSortAscending)
+                    {
+                        // asc
+                        mails = _context.Mails
+                           .Where(x => x.Email.Contains(queryParams.Content)
+                           || x.ID.ToString().Contains(queryParams.Content)
+                           || x.EmailContent.Contains(queryParams.Content)
+                           || x.FileAttach.Contains(queryParams.Content)
+                           || x.CreateBy.Contains(queryParams.Content)
+                           || x.Subject.Contains(queryParams.Content)
+                           || x.SentStatus.Contains(queryParams.Content)
+                           || x.EmailCC.Contains(queryParams.Content)
+                           || x.EmailBCC.Contains(queryParams.Content)
+                           || x.Location.Contains(queryParams.Content)
+                           || x.MailType.ToString().Contains(queryParams.Content)
+                           || x.Organizer.Contains(queryParams.Content)
+                           || x.OrganizerMail.Contains(queryParams.Content)
+                           || x.UID.Contains(queryParams.Content)
+                           )
+                           .OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                    }
+                    else
+                    {
+                        // desc
+                        mails = _context.Mails
+                             .Where(x => x.Email.Contains(queryParams.Content)
+                             || x.ID.ToString().Contains(queryParams.Content)
+                             || x.EmailContent.Contains(queryParams.Content)
+                             || x.FileAttach.Contains(queryParams.Content)
+                             || x.CreateBy.Contains(queryParams.Content)
+                             || x.Subject.Contains(queryParams.Content)
+                             || x.SentStatus.Contains(queryParams.Content)
+                             || x.EmailCC.Contains(queryParams.Content)
+                             || x.EmailBCC.Contains(queryParams.Content)
+                             || x.Location.Contains(queryParams.Content)
+                             || x.MailType.ToString().Contains(queryParams.Content)
+                             || x.Organizer.Contains(queryParams.Content)
+                             || x.OrganizerMail.Contains(queryParams.Content)
+                             || x.UID.Contains(queryParams.Content)
+                             )
+                             .OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                    }
+                }
+                else // no content
+                {
+                    if (queryParams.IsSortAscending)
+                    {
+                        mails = _context.Mails.OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                    }
+                    else
+                    {
+                        mails = _context.Mails.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                    }
+                }
+            }
+            // queryParams.FromDate and queryParams.ToDate "NOT null"
+            else 
+            {
+                if (!string.IsNullOrEmpty(queryParams.Content)) // have content
+                {
+                    if (queryParams.IsSortAscending)
+                    {
+                        // asc
+                        mails = _context.Mails
+                           .Where(x => (x.Email.Contains(queryParams.Content)
+                           || x.ID.ToString().Contains(queryParams.Content)
+                           || x.EmailContent.Contains(queryParams.Content)
+                           || x.FileAttach.Contains(queryParams.Content)
+                           || x.CreateBy.Contains(queryParams.Content)
+                           || x.Subject.Contains(queryParams.Content)
+                           || x.SentStatus.Contains(queryParams.Content)
+                           || x.EmailCC.Contains(queryParams.Content)
+                           || x.EmailBCC.Contains(queryParams.Content)
+                           || x.Location.Contains(queryParams.Content)
+                           || x.MailType.ToString().Contains(queryParams.Content)
+                           || x.Organizer.Contains(queryParams.Content)
+                           || x.OrganizerMail.Contains(queryParams.Content)
+                           || x.UID.Contains(queryParams.Content))
+                           && (x.CreateTime <= queryParams.ToDate && x.CreateTime >= queryParams.FromDate)
+                           )
+                           .OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                    }
+                    else
+                    {
+                        // decs
+                        mails = _context.Mails
+                             .Where(x => (x.Email.Contains(queryParams.Content)
+                             || x.ID.ToString().Contains(queryParams.Content)
+                             || x.EmailContent.Contains(queryParams.Content)
+                             || x.FileAttach.Contains(queryParams.Content)
+                             || x.CreateBy.Contains(queryParams.Content)
+                             || x.Subject.Contains(queryParams.Content)
+                             || x.SentStatus.Contains(queryParams.Content)
+                             || x.EmailCC.Contains(queryParams.Content)
+                             || x.EmailBCC.Contains(queryParams.Content)
+                             || x.Location.Contains(queryParams.Content)
+                             || x.MailType.ToString().Contains(queryParams.Content)
+                             || x.Organizer.Contains(queryParams.Content)
+                             || x.OrganizerMail.Contains(queryParams.Content)
+                             || x.UID.Contains(queryParams.Content))
+                             && (x.CreateTime <= queryParams.ToDate && x.CreateTime >= queryParams.FromDate)
+                             )
+                             .OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                    }
+                }
+                else // no content
+                {
+                    if (queryParams.IsSortAscending)
+                    {
+                        //asc
+                        mails = _context.Mails.Where(x => x.CreateTime <= queryParams.ToDate && x.CreateTime >= queryParams.FromDate).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                    }
+                    else
+                    {
+                        //desc
+                        mails = _context.Mails.Where(x => x.CreateTime <= queryParams.ToDate && x.CreateTime >= queryParams.FromDate).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+
+                    }
+                }
+            }
+            mails = mails.Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
+            return mails;
         }
-
-
-
-        /* public async Task<IEnumerable<Mail>> GetMails2(QueryParams queryParams)
-         {
-             var mails = new List<Mail>();
-
-             if (!string.IsNullOrEmpty(queryParams.Content))
-             {
-                 mails = await _context.Mails.Where(x => x.Subject.Contains(queryParams.Content)).ToListAsync();
-             }
-             else
-             {
-                 mails = await _context.Mails.ToListAsync();
-             }
-
-             if (queryParams.SortBy == "CreateBy")
-             {
-                 if (queryParams.IsSortAscending)
-                 {
-                     mails = mails.OrderBy(x => x.CreateBy).ToList();
-
-                 }
-                 else
-                 {
-                     mails = mails.OrderByDescending(x => x.CreateBy).ToList();
-                 }
-             }
-             else
-             {
-                 mails = await _context.Mails.ToListAsync();
-             }
-
-             if (queryParams.Page == 0 && queryParams.PageSize == 0 || queryParams.PageSize == 0)
-             {
-                 return mails;
-             }
-             else
-             {
-                 mails = mails.ToList().Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
-                 return mails;
-             }
-         }*/
 
         public async Task<Mail> GetMailByID(long ID)
         {

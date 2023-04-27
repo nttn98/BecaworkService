@@ -1,4 +1,6 @@
-﻿namespace BecaworkService.Models
+﻿using System;
+
+namespace BecaworkService.Models
 {
     public class QueryParams
     {
@@ -7,6 +9,9 @@
         public string SortBy { get; set; }
         public bool IsSortAscending { get; set; }
         public string Content { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+
 
     }
 }
