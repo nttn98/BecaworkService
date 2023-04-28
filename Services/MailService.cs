@@ -32,7 +32,6 @@ namespace BecaworkService.Services
             }
 
         }
-
         public async Task<IEnumerable<Mail>> GetMails2(QueryParams queryParams)
         {
             var mails = new List<Mail>();
@@ -41,11 +40,10 @@ namespace BecaworkService.Services
             {
                 ["id"] = s => s.ID,
                 ["email"] = s => s.Email,
-                ["emailcontent"] = s => s.EmailContent,
-                ["fileattach"] = s => s.FileAttach,
+                /*["emailcontent"] = s => s.EmailContent, //*/
                 ["createby"] = s => s.CreateBy,
                 ["issend"] = s => s.IsSend,
-                ["subject"] = s => s.Subject,
+                /*["subject"] = s => s.Subject, //*/
                 ["sentstatus"] = s => s.SentStatus,
                 ["emailcc"] = s => s.EmailCC,
                 ["emailbcc"] = s => s.EmailBCC,
@@ -72,15 +70,11 @@ namespace BecaworkService.Services
                 {
                     if (queryParams.IsSortAscending)
                     {
-                        // asc
+                        // true
                         mails = _context.Mails
                            .Where(x => x.Email.Contains(queryParams.Content)
                            || x.ID.ToString().Contains(queryParams.Content)
-                           || x.EmailContent.Contains(queryParams.Content)
-                           || x.FileAttach.Contains(queryParams.Content)
                            || x.CreateBy.Contains(queryParams.Content)
-                           || x.Subject.Contains(queryParams.Content)
-                           || x.SentStatus.Contains(queryParams.Content)
                            || x.EmailCC.Contains(queryParams.Content)
                            || x.EmailBCC.Contains(queryParams.Content)
                            || x.Location.Contains(queryParams.Content)
@@ -93,23 +87,19 @@ namespace BecaworkService.Services
                     }
                     else
                     {
-                        // desc
+                        // false
                         mails = _context.Mails
-                             .Where(x => x.Email.Contains(queryParams.Content)
-                             || x.ID.ToString().Contains(queryParams.Content)
-                             || x.EmailContent.Contains(queryParams.Content)
-                             || x.FileAttach.Contains(queryParams.Content)
-                             || x.CreateBy.Contains(queryParams.Content)
-                             || x.Subject.Contains(queryParams.Content)
-                             || x.SentStatus.Contains(queryParams.Content)
-                             || x.EmailCC.Contains(queryParams.Content)
-                             || x.EmailBCC.Contains(queryParams.Content)
-                             || x.Location.Contains(queryParams.Content)
-                             || x.MailType.ToString().Contains(queryParams.Content)
-                             || x.Organizer.Contains(queryParams.Content)
-                             || x.OrganizerMail.Contains(queryParams.Content)
-                             || x.UID.Contains(queryParams.Content)
-                             )
+                           .Where(x => x.Email.Contains(queryParams.Content)
+                           || x.ID.ToString().Contains(queryParams.Content)
+                           || x.CreateBy.Contains(queryParams.Content)
+                           || x.EmailCC.Contains(queryParams.Content)
+                           || x.EmailBCC.Contains(queryParams.Content)
+                           || x.Location.Contains(queryParams.Content)
+                           || x.MailType.ToString().Contains(queryParams.Content)
+                           || x.Organizer.Contains(queryParams.Content)
+                           || x.OrganizerMail.Contains(queryParams.Content)
+                           || x.UID.Contains(queryParams.Content)
+                           )
                              .OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
                     }
                 }
@@ -126,21 +116,17 @@ namespace BecaworkService.Services
                 }
             }
             // queryParams.FromDate and queryParams.ToDate "NOT null"
-            else 
+            else
             {
                 if (!string.IsNullOrEmpty(queryParams.Content)) // have content
                 {
                     if (queryParams.IsSortAscending)
                     {
-                        // asc
+                        // true
                         mails = _context.Mails
                            .Where(x => (x.Email.Contains(queryParams.Content)
                            || x.ID.ToString().Contains(queryParams.Content)
-                           || x.EmailContent.Contains(queryParams.Content)
-                           || x.FileAttach.Contains(queryParams.Content)
                            || x.CreateBy.Contains(queryParams.Content)
-                           || x.Subject.Contains(queryParams.Content)
-                           || x.SentStatus.Contains(queryParams.Content)
                            || x.EmailCC.Contains(queryParams.Content)
                            || x.EmailBCC.Contains(queryParams.Content)
                            || x.Location.Contains(queryParams.Content)
@@ -154,22 +140,18 @@ namespace BecaworkService.Services
                     }
                     else
                     {
-                        // decs
+                        // false
                         mails = _context.Mails
-                             .Where(x => (x.Email.Contains(queryParams.Content)
-                             || x.ID.ToString().Contains(queryParams.Content)
-                             || x.EmailContent.Contains(queryParams.Content)
-                             || x.FileAttach.Contains(queryParams.Content)
-                             || x.CreateBy.Contains(queryParams.Content)
-                             || x.Subject.Contains(queryParams.Content)
-                             || x.SentStatus.Contains(queryParams.Content)
-                             || x.EmailCC.Contains(queryParams.Content)
-                             || x.EmailBCC.Contains(queryParams.Content)
-                             || x.Location.Contains(queryParams.Content)
-                             || x.MailType.ToString().Contains(queryParams.Content)
-                             || x.Organizer.Contains(queryParams.Content)
-                             || x.OrganizerMail.Contains(queryParams.Content)
-                             || x.UID.Contains(queryParams.Content))
+                            .Where(x => (x.Email.Contains(queryParams.Content)
+                           || x.ID.ToString().Contains(queryParams.Content)
+                           || x.CreateBy.Contains(queryParams.Content)
+                           || x.EmailCC.Contains(queryParams.Content)
+                           || x.EmailBCC.Contains(queryParams.Content)
+                           || x.Location.Contains(queryParams.Content)
+                           || x.MailType.ToString().Contains(queryParams.Content)
+                           || x.Organizer.Contains(queryParams.Content)
+                           || x.OrganizerMail.Contains(queryParams.Content)
+                           || x.UID.Contains(queryParams.Content))
                              && (x.CreateTime <= queryParams.ToDate && x.CreateTime >= queryParams.FromDate)
                              )
                              .OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
@@ -179,12 +161,12 @@ namespace BecaworkService.Services
                 {
                     if (queryParams.IsSortAscending)
                     {
-                        //asc
+                        //true
                         mails = _context.Mails.Where(x => x.CreateTime <= queryParams.ToDate && x.CreateTime >= queryParams.FromDate).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
                     }
                     else
                     {
-                        //desc
+                        //false
                         mails = _context.Mails.Where(x => x.CreateTime <= queryParams.ToDate && x.CreateTime >= queryParams.FromDate).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
 
                     }
