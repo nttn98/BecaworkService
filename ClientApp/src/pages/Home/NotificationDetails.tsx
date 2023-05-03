@@ -10,10 +10,7 @@ export default function NotificationDetails() {
 
   useEffect(() => {
     axios
-      .get(
-        `https://64477eaa7bb84f5a3e402b8e.mockapi.io/api/data/notificationdetails/` +
-          id
-      )
+      .get(`https://localhost:5001/api/Notification/GetNotificationByID/` + id)
       .then((res) => {
         if (res) {
           setData(res.data);
