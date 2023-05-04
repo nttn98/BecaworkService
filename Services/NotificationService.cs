@@ -17,24 +17,41 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<IEnumerable<Notification>> GetNotifications(int page, int pageSize)
-        {
-            if (page == 0 && pageSize == 0 || pageSize == 0)
-            {
-                var notifications = await _context.Notifications.ToListAsync();
-                return notifications;
-            }
-            else if (page == 0)
-            {
-                var notifications = _context.Notifications.ToList().Take(pageSize);
-                return notifications;
-            }
-            else
-            {
-                var notifications = _context.Notifications.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-                return notifications;
-            }
-        }
+
+        // public async Task<IEnumerable<Notification>> GetNotifications(int page, int pageSize)
+        // {
+        //     if (page == 0 && pageSize == 0 || pageSize == 0)
+        //     {
+        //         var notifications = await _context.Notifications.ToListAsync();
+        //         return notifications;
+        //     }
+        //     else 
+        //     {
+        //         var notifications = _context.Notifications.ToList().Skip((page - 1) * pageSize).Take(pageSize);
+        //         return notifications;
+        //     }
+          
+        // }
+public async Task<NotificationResponse> GetNotifications(int page, int pageSize)
+{
+    var total = await _context.Notifications.CountAsync();
+    if (page == 0 && pageSize == 0 || pageSize == 0)
+    {
+        var notifications = await _context.Notifications.ToListAsync();
+        return new NotificationResponse{
+            Total = total,
+            Data = notifications
+        };
+    }
+    else 
+    {
+        var notifications = await _context.Notifications.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        return new NotificationResponse{
+            Total = total,
+            Data = notifications
+        };
+    }
+}
 
         public async Task<Notification> GetNotificationByID(long ID)
         {
