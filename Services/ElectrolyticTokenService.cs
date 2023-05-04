@@ -16,6 +16,7 @@ namespace BecaworkService.Services
         {
             _context = context;
         }
+
         public async Task<ElectrolyticToken> AddElectrolyticToken(ElectrolyticToken objElectrolyticToken)
         {
             _context.ElectrolyticTokens.Add(objElectrolyticToken);
@@ -26,10 +27,10 @@ namespace BecaworkService.Services
         public bool DeteleElectrolyticToken(long ID)
         {
             bool result = false;
-            var tempEToken = _context.ElectrolyticTokens.Find(ID);
-            if (tempEToken != null)
+            var EToken = _context.ElectrolyticTokens.Find(ID);
+            if (EToken != null)
             {
-                _context.Entry(tempEToken).State = EntityState.Deleted;
+                _context.Entry(EToken).State = EntityState.Deleted;
                 _context.SaveChanges();
                 result = true;
             }
@@ -48,19 +49,21 @@ namespace BecaworkService.Services
 
         public async Task<IEnumerable<ElectrolyticToken>> GetElectrolyticTokens(int page, int pageSize)
         {
+            var ETokens = new List<ElectrolyticToken>();
+
             if (page == 0 && pageSize == 0 || pageSize == 0)
             {
-                var ETokens = await _context.ElectrolyticTokens.ToListAsync();
+                ETokens = await _context.ElectrolyticTokens.ToListAsync();
                 return ETokens;
             }
             else if (page == 0)
             {
-                var ETokens = _context.ElectrolyticTokens.ToList().Take(pageSize);
+                ETokens = (List<ElectrolyticToken>)_context.ElectrolyticTokens.ToList().Take(pageSize);
                 return ETokens;
             }
             else
             {
-                var ETokens = _context.ElectrolyticTokens.ToList().Skip((page - 1) * pageSize).Take(pageSize);
+                ETokens = (List<ElectrolyticToken>)_context.ElectrolyticTokens.ToList().Skip((page - 1) * pageSize).Take(pageSize);
                 return ETokens;
             }
         }
