@@ -28,6 +28,7 @@ namespace BecaworkService.Services
         {
             bool result = false;
             var EToken = _context.ElectrolyticTokens.Find(ID);
+
             if (EToken != null)
             {
                 _context.Entry(EToken).State = EntityState.Deleted;
@@ -38,6 +39,7 @@ namespace BecaworkService.Services
             {
                 result = false;
             }
+
             return result;
         }
 
@@ -54,18 +56,17 @@ namespace BecaworkService.Services
             if (page == 0 && pageSize == 0 || pageSize == 0)
             {
                 ETokens = await _context.ElectrolyticTokens.ToListAsync();
-                return ETokens;
             }
             else if (page == 0)
             {
                 ETokens = (List<ElectrolyticToken>)_context.ElectrolyticTokens.ToList().Take(pageSize);
-                return ETokens;
             }
             else
             {
                 ETokens = (List<ElectrolyticToken>)_context.ElectrolyticTokens.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-                return ETokens;
             }
+
+            return ETokens;
         }
 
         public async Task<ElectrolyticToken> UpdateElectrolyticToken(ElectrolyticToken objElectrolyticToken)

@@ -50,21 +50,22 @@ namespace BecaworkService.Services
 
         public async Task<IEnumerable<FCMToken>> GetFCMTokens(int page, int pageSize)
         {
+            var FCMTokens = new List<FCMToken>();
+
             if (page == 0 && pageSize == 0 || pageSize == 0)
             {
-                var FCMTokens = await _context.FCMTokens.ToListAsync();
-                return FCMTokens;
+                FCMTokens = await _context.FCMTokens.ToListAsync();
             }
             else if (page == 0)
             {
-                var FCMTokens = _context.FCMTokens.ToList().Take(pageSize);
-                return FCMTokens;
+                FCMTokens = (List<FCMToken>)_context.FCMTokens.ToList().Take(pageSize);
             }
             else
             {
-                var FCMTokens = _context.FCMTokens.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-                return FCMTokens;
+                FCMTokens = (List<FCMToken>)_context.FCMTokens.ToList().Skip((page - 1) * pageSize).Take(pageSize);
             }
+
+            return FCMTokens;
         }
 
         public async Task<FCMToken> UpdateFCMToken(FCMToken fcmToken)

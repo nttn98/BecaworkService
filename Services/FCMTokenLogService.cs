@@ -19,21 +19,22 @@ namespace BecaworkService.Services
         }
         public async Task<IEnumerable<FCMTokenLog>> GetFCMTokenLogs(int page, int pageSize)
         {
+            var FCMTokenLogs = new List<FCMTokenLog>();
+
             if (page == 0 && pageSize == 0 || pageSize == 0)
             {
-                var tempFCMTokenLogs = await _context.FCMTokenLogs.ToListAsync();
-                return tempFCMTokenLogs;
+                FCMTokenLogs = await _context.FCMTokenLogs.ToListAsync();
             }
             else if (page == 0)
             {
-                var tempFCMTokenLogs = _context.FCMTokenLogs.ToList().Take(pageSize);
-                return tempFCMTokenLogs;
+                FCMTokenLogs = (List<FCMTokenLog>)_context.FCMTokenLogs.ToList().Take(pageSize);
             }
             else
             {
-                var tempFCMTokenLogs = _context.FCMTokenLogs.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-                return tempFCMTokenLogs;
+                FCMTokenLogs = (List<FCMTokenLog>)_context.FCMTokenLogs.ToList().Skip((page - 1) * pageSize).Take(pageSize);
             }
+
+            return FCMTokenLogs;
         }
 
         public async Task<FCMTokenLog> GetFCMTokenLogByID(long ID)
