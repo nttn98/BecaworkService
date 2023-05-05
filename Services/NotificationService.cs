@@ -21,7 +21,7 @@ namespace BecaworkService.Services
         public async Task<NotificationResponse> GetNotifications(int page, int pageSize)
         {
             var total = await _context.Notifications.CountAsync();
-            if (page == 0 && pageSize == 0 || pageSize == 0)
+            if (page == 0 && pageSize == 0)
             {
                 var notifications = await _context.Notifications.ToListAsync();
                 return new NotificationResponse
@@ -41,8 +41,9 @@ namespace BecaworkService.Services
             }
         }
 
-        public async Task<IEnumerable<Notification>> GetNotifications1(QueryParams queryParams)
+        public async Task<NotificationResponse> GetNotifications1(QueryParams queryParams)
         {
+            var total = _context.Notifications.Count();
             var notifications = new List<Notification>();
             var columnsMap = new Dictionary<string, Expression<Func<Notification, object>>>()
             {
@@ -148,7 +149,11 @@ namespace BecaworkService.Services
                 }
             }
             notifications = notifications.Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
-            return notifications;
+            return new NotificationResponse
+            {
+                Total = total,
+                Data = notifications
+            };
         }
 
         public async Task<Notification> GetNotificationByID(long ID)
