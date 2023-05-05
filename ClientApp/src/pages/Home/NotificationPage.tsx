@@ -10,31 +10,38 @@ export default function NotificationPage() {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+
   const loadData = () => {
     axios
-      .get("https://localhost:5001/api/Notification/GetNotifications")
+      .get(
+        `https://localhost:5001/api/Notification/GetNotifications?page=${currentPage}&pageSize=${pageSize}`
+      )
       .then((res) => {
         if (res) {
           setData(res.data);
+          setTotalItems(res.data.totalItems); // Store total number of items in state
         }
       });
   };
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [currentPage, pageSize]);
 
   const columns: ColumnsType<NotificationModel> = [
     {
       title: "Id",
-      width: 50,
+      width: 120,
       dataIndex: "id",
       key: "1",
       fixed: "left",
     },
     {
       title: "Created Time",
-      width: 150,
+
       dataIndex: "createdTime",
       key: "2",
     },
@@ -42,6 +49,7 @@ export default function NotificationPage() {
       title: "Type",
       dataIndex: "type",
       key: "3",
+      width: 200,
     },
     {
       title: "Content",
@@ -59,7 +67,7 @@ export default function NotificationPage() {
       title: "Email",
       dataIndex: "email",
       key: "6",
-      width: 250,
+      // width: 250,
     },
     {
       title: "Last Modified",
@@ -69,6 +77,7 @@ export default function NotificationPage() {
     {
       title: "From",
       dataIndex: "from",
+      width: 200,
       key: "6",
     },
     {
@@ -87,12 +96,14 @@ export default function NotificationPage() {
       title: "Action",
       key: "operation",
       fixed: "right",
+      width: 200,
       render: (record: any) => {
         const id = record.id;
         return (
           <>
             <Link to={`/notification/details/${id}`}> Details </Link> |
-            <Link to={`/notification/edit/${id}`}> Edit </Link>
+            <Link to={`/notification/edit/${id}`}> Edit </Link> |
+            <Link to={`/notification/edit/${id}`}> Delete </Link>
           </>
         );
       },
@@ -110,6 +121,7 @@ export default function NotificationPage() {
       loadData();
     }
   };
+
   const globalSearch = () => {
     const filteredData = data.filter((item: NotificationModel) => {
       const rowValues = Object.values(item).join("").toLowerCase();
@@ -118,6 +130,14 @@ export default function NotificationPage() {
     });
     setData(filteredData);
   };
+
+  const handlePageChange = (page: number, pageSize?: number) => {
+    setCurrentPage(page);
+    if (pageSize) {
+      setPageSize(pageSize);
+    }
+  };
+
   return (
     <div>
       <Input
@@ -147,7 +167,14 @@ export default function NotificationPage() {
       <Table
         columns={columns}
         dataSource={data}
-        scroll={{ x: 1500 }}
+        rowKey={(record: NotificationModel) => record.id.toString()}
+        pagination={{
+          current: currentPage,
+          pageSize: pageSize,
+          total: totalItems,
+          onChange: handlePageChange,
+        }}
+        scroll={{ x: 2500 }}
         style={{ marginTop: "20px" }}
       />
     </div>
