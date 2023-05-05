@@ -60,6 +60,10 @@ namespace BecaworkService.Services
             {
                 queryParams.SortBy = "createdtime";
             }
+            if (queryParams.Page == 0)
+            {
+                queryParams.Page = 1;
+            }
             if (queryParams.PageSize == 0)
             {
                 queryParams.PageSize = 50;
@@ -71,33 +75,33 @@ namespace BecaworkService.Services
                     if (queryParams.IsSortAscending)
                     {
                         // true
-                        notifications = _context.Notifications
+                        notifications = await _context.Notifications
                             .Where(x => x.Id.ToString().Contains(queryParams.Content)
                             || x.Type.Contains(queryParams.Content)
                             || x.Email.Contains(queryParams.Content)
                             || x.From.Contains(queryParams.Content)
-                            ).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
+                            ).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToListAsync();
                     }
                     else
                     {
                         //false
-                        notifications = _context.Notifications
+                        notifications = await _context.Notifications
                               .Where(x => x.Id.ToString().Contains(queryParams.Content)
                               || x.Type.Contains(queryParams.Content)
                               || x.Email.Contains(queryParams.Content)
                               || x.From.Contains(queryParams.Content)
-                              ).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
+                              ).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToListAsync();
                     }
                 }
                 else //no content
                 {
                     if (queryParams.IsSortAscending)
                     {
-                        notifications = _context.Notifications.OrderBy(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
+                        notifications = await _context.Notifications.OrderBy(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToListAsync();
                     }
                     else
                     {
-                        notifications = _context.Notifications.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
+                        notifications = await _context.Notifications.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToListAsync();
                     }
                 }
             }
@@ -116,7 +120,7 @@ namespace BecaworkService.Services
                             || x.From.Contains(queryParams.Content))
                             && ((x.CreatedTime <= queryParams.ToDate && x.CreatedTime >= queryParams.FromDate)
                              || (x.LastModified <= queryParams.ToDate && x.LastModified >= queryParams.FromDate))
-                            ).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
+                            ).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToListAsync();
                     }
                     else
                     {
@@ -138,13 +142,14 @@ namespace BecaworkService.Services
                     {
                         notifications = await _context.Notifications
                             .Where(x => (x.CreatedTime <= queryParams.ToDate && x.CreatedTime >= queryParams.FromDate) || (x.LastModified <= queryParams.ToDate && x.LastModified >= queryParams.FromDate))
-                            .OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
+                            .OrderBy(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToListAsync();
+
                     }
                     else
                     {
                         notifications = await _context.Notifications
                            .Where(x => (x.CreatedTime <= queryParams.ToDate && x.CreatedTime >= queryParams.FromDate) || (x.LastModified <= queryParams.ToDate && x.LastModified >= queryParams.FromDate))
-                           .OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
+                           .OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToListAsync();
                     }
                 }
             }
