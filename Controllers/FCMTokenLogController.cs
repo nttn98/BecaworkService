@@ -27,6 +27,15 @@ namespace BecaworkService.Controllers
             return Ok(FCMTokenLogs);
         }
 
+        //Get v2
+        [HttpGet]
+        [Route("GetFCMTokenLogs2")]
+        public async Task<IActionResult> GetFCMTokenLogs2([FromQuery] QueryParams queryParams)
+        {
+            var FCMTokenLogs = await _FCMTokenLogService.GetFCMTokenLogs2(queryParams);
+            return Ok(FCMTokenLogs);
+        }
+
         //Get by ID 
         [HttpGet]
         [Route("GetFCMTokenLogByID")]
