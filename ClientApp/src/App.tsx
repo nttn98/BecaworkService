@@ -7,6 +7,8 @@ import NotificationPage from "./pages/Home/NotificationPage";
 import NotificationDetails from "./pages/Home/NotificationDetails";
 import NotificationCreate from "./pages/Home/NotificationCreate";
 import NotificationEdit from "./pages/Home/NotificationEdit";
+import MailPage from "./pages/Mail/MailPage";
+import { MailDetailPage } from "./pages/Mail/MailDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,14 @@ const router = createBrowserRouter([
   {
     path: "/notification/edit/:id",
     element: <NotificationEdit />,
+  },
+  {
+    path: "mail",
+    element: <MailPage />,
+  },
+  {
+    path: "mail/:id",
+    element: <MailDetailPage />,
   },
 ]);
 

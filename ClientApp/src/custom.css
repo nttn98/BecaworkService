@@ -1,7 +1,14 @@
 /* Provide sufficient contrast against white background */
+body {
+  margin: 0;
+}
+#root > .ant-layout {
+  height: 100vh;
+}
 a {
   color: #0366d6;
 }
+
 
 code {
   color: #e01a76;
@@ -20,4 +27,27 @@ code {
 }
 .ant-row {
   margin-top: 5px;
+}
+
+
+.divs {
+  display: flex;
+  width: 100%;
+justify-content: space-between;
+  background: gray;
+
+}
+
+.divs > div{
+  width: 100px;
+}
+
+.divs > div:nth-child(1) {
+  background: red;
+}
+.divs > div:nth-child(2) {
+  background: blue;
+}
+.divs > div:nth-child(3) {
+  background: yellow;
 }
