@@ -40,6 +40,11 @@ const AppLayout: FC<Props> = (props) => {
                 key: "2",
                 icon: <UserOutlined />,
               },
+              {
+                label: <a href="/mail">Mail</a>,
+                key: "3",
+                icon: <UserOutlined />,
+              },
             ]}
           />
         </Sider>
