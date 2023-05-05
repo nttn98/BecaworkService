@@ -18,18 +18,11 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<IEnumerable<Notification>> GetNotifications(int page, int pageSize)
+
+        public async Task<NotificationResponse> GetNotifications(QueryParams queryParams)
         {
-            if (pageSize == 0)
-            {
-                pageSize = 50;
-            }
-            var notifications = _context.Notifications.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-            return notifications;
-        }
-        public async Task<IEnumerable<Notification>> GetNotifications2(QueryParams queryParams)
-        {
-            var totalItem = _context.Notifications.Count();
+
+            var total = await _context.Notifications.CountAsync();
             var notifications = new List<Notification>();
             var columnsMap = new Dictionary<string, Expression<Func<Notification, object>>>()
             {
@@ -134,9 +127,9 @@ namespace BecaworkService.Services
                     }
                 }
             }
-            
             notifications = notifications.Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
-            return notifications;
+            var temp = new NotificationResponse(total, notifications);
+            return temp;
         }
 
         public async Task<Notification> GetNotificationByID(long ID)
