@@ -43,7 +43,7 @@ namespace BecaworkService.Services
 
         public async Task<NotificationResponse> GetNotifications1(QueryParams queryParams)
         {
-            var total = _context.Notifications.Count();
+            var total = await _context.Notifications.CountAsync();
             var notifications = new List<Notification>();
             var columnsMap = new Dictionary<string, Expression<Func<Notification, object>>>()
             {
@@ -109,19 +109,19 @@ namespace BecaworkService.Services
                     if (queryParams.IsSortAscending)
                     {
                         // true
-                        notifications = _context.Notifications
+                        notifications = await _context.Notifications
                             .Where(x => (x.Id.ToString().Contains(queryParams.Content)
                             || x.Type.Contains(queryParams.Content)
                             || x.Email.Contains(queryParams.Content)
                             || x.From.Contains(queryParams.Content))
                             && ((x.CreatedTime <= queryParams.ToDate && x.CreatedTime >= queryParams.FromDate)
                              || (x.LastModified <= queryParams.ToDate && x.LastModified >= queryParams.FromDate))
-                            ).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                            ).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
                     }
                     else
                     {
                         //false
-                        notifications = _context.Notifications
+                        notifications = await _context.Notifications
                               .Where(x => (x.Id.ToString().Contains(queryParams.Content)
                               || x.Type.Contains(queryParams.Content)
                               || x.Email.Contains(queryParams.Content)
@@ -129,22 +129,22 @@ namespace BecaworkService.Services
                               && ((x.CreatedTime <= queryParams.ToDate && x.CreatedTime >= queryParams.FromDate)
                              || (x.LastModified <= queryParams.ToDate && x.LastModified >= queryParams.FromDate))
 
-                              ).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                              ).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
                     }
                 }
                 else //no content
                 {
                     if (queryParams.IsSortAscending)
                     {
-                        notifications = _context.Notifications
+                        notifications = await _context.Notifications
                             .Where(x => (x.CreatedTime <= queryParams.ToDate && x.CreatedTime >= queryParams.FromDate) || (x.LastModified <= queryParams.ToDate && x.LastModified >= queryParams.FromDate))
-                            .OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                            .OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
                     }
                     else
                     {
-                        notifications = _context.Notifications
+                        notifications = await _context.Notifications
                            .Where(x => (x.CreatedTime <= queryParams.ToDate && x.CreatedTime >= queryParams.FromDate) || (x.LastModified <= queryParams.ToDate && x.LastModified >= queryParams.FromDate))
-                           .OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                           .OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
                     }
                 }
             }
