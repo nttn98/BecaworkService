@@ -76,7 +76,7 @@ namespace BecaworkService.Services
                             || x.Type.Contains(queryParams.Content)
                             || x.Email.Contains(queryParams.Content)
                             || x.From.Contains(queryParams.Content)
-                            ).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                            ).OrderBy(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
                     }
                     else
                     {
@@ -86,18 +86,18 @@ namespace BecaworkService.Services
                               || x.Type.Contains(queryParams.Content)
                               || x.Email.Contains(queryParams.Content)
                               || x.From.Contains(queryParams.Content)
-                              ).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                              ).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
                     }
                 }
                 else //no content
                 {
                     if (queryParams.IsSortAscending)
                     {
-                        notifications = _context.Notifications.OrderBy(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                        notifications = _context.Notifications.OrderBy(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
                     }
                     else
                     {
-                        notifications = _context.Notifications.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToList();
+                        notifications = _context.Notifications.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
                     }
                 }
             }
@@ -148,7 +148,6 @@ namespace BecaworkService.Services
                     }
                 }
             }
-            notifications = notifications.Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToList();
             return new NotificationResponse
             {
                 Total = total,
