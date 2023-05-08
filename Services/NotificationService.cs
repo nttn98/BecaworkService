@@ -1,5 +1,7 @@
-﻿using BecaworkService.Interfaces;
+﻿using BecaworkService.Helper;
+using BecaworkService.Interfaces;
 using BecaworkService.Models;
+using BecaworkService.Models.Responses;
 using BecaworkService.Respository;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -158,6 +160,56 @@ namespace BecaworkService.Services
                 Total = total,
                 Data = notifications
             };
+        }
+
+        public async Task<QueryResult<Notification>> GetNotifications2(QueryParams queryParams)
+        {
+            var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
+            var result = new QueryResult<Notification>();
+
+            if (queryParams.Page == 0)
+            {
+                queryParams.Page = 1;
+            }
+            var pagingSpecification = new PagingSpecification(queryParams);
+            using (var unitOfWork = new UnitOfWork(connectionString))
+            {
+                var columnsMap = new Dictionary<string, Expression<Func<Notification, object>>>()
+                {
+                    ["id"] = s => s.Id,
+                    ["createdtime"] = s => s.CreatedTime,
+                    ["type"] = s => s.Type,
+                    ["isread"] = s => s.IsRead,
+                    ["email"] = s => s.Email,
+                    ["lastmodified"] = s => s.LastModified,
+                    ["from"] = s => s.From,
+                    ["isseen"] = s => s.IsSeen,
+                };
+                if (queryParams.SortBy == null || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
+                {
+                    queryParams.SortBy = "createdtime";
+                }
+
+                var notification = await unitOfWork.NotificationRepository
+                    .FindAll(predicate: x => x.Id > 0
+                    && (queryParams.FromDate == null || queryParams.ToDate == null)
+                    && ((!string.IsNullOrEmpty(queryParams.Content)) 
+                    && (x.Type.Contains(queryParams.Content)
+                    || x.Email.Contains(queryParams.Content)
+                    || x.From.Contains(queryParams.Content)))
+                    ,
+
+                    include: null,
+                    orderBy: source => String.IsNullOrEmpty(queryParams.SortBy) ? source.OrderByDescending(d => d.Id)
+                                                                                : queryParams.IsSortAscending ?
+                                                                                source.OrderBy(columnsMap[queryParams.SortBy]) :
+                                                                                source.OrderByDescending(columnsMap[queryParams.SortBy]),
+                    disableTracking: true,
+                    pagingSpecification: pagingSpecification);
+                result = notification;
+            }
+
+            return result;
         }
 
         public async Task<Notification> GetNotificationByID(long ID)

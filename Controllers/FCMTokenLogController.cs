@@ -1,4 +1,4 @@
-﻿using BecaworkService.Interfaces;
+﻿/*using BecaworkService.Interfaces;
 using BecaworkService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +45,7 @@ namespace BecaworkService.Controllers
             return Ok(tempFCMTokenLog);
         }
         //Add FCMTokenLog
-        /* [HttpPost]
+        *//* [HttpPost]
          [Route("AddFCMTokenLog")]
          public async Task<IActionResult> Post(FCMTokenLog objFCMTokenLog)
          {
@@ -57,7 +57,7 @@ namespace BecaworkService.Controllers
              }
              return Ok("Added FCMTokenLog Successfully");
          }
- */
+ *//*
         //Update FCMTokenLog
         [HttpPut]
         [Route("UpdateFCMTokenLog")]
@@ -77,3 +77,4 @@ namespace BecaworkService.Controllers
         }
     }
 }
+*/
