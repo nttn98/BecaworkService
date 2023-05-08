@@ -25,13 +25,13 @@ namespace BecaworkService.Controllers
             return Ok(tempNotifi);
         }
 
-        [HttpGet]
+     /*   [HttpGet]
         [Route("GetNotifications1")]
         public async Task<IActionResult> GetNotifications1([FromQuery] QueryParams queryParams)
         {
             var tempNotifi = await _notificationService.GetNotifications1(queryParams);
             return Ok(tempNotifi);
-        }
+        }*/
 
         [HttpGet]
         [Route("GetNotifications2")]

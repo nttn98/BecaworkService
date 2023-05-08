@@ -43,7 +43,7 @@ namespace BecaworkService.Services
             }
         }
 
-        public async Task<NotificationResponse> GetNotifications1(QueryParams queryParams)
+        /*public async Task<NotificationResponse> GetNotifications1(QueryParams queryParams)
         {
             var total = await _context.Notifications.CountAsync();
             var notifications = new List<Notification>();
@@ -160,7 +160,7 @@ namespace BecaworkService.Services
                 Total = total,
                 Data = notifications
             };
-        }
+        }*/
 
         public async Task<QueryResult<Notification>> GetNotifications2(QueryParams queryParams)
         {
@@ -192,11 +192,13 @@ namespace BecaworkService.Services
 
                 var notification = await unitOfWork.NotificationRepository
                     .FindAll(predicate: x => x.Id > 0
-                    && (queryParams.FromDate == null || queryParams.ToDate == null)
-                    && ((!string.IsNullOrEmpty(queryParams.Content)) 
-                    && (x.Type.Contains(queryParams.Content)
-                    || x.Email.Contains(queryParams.Content)
-                    || x.From.Contains(queryParams.Content)))
+                    && ((queryParams.FromDate == null || queryParams.ToDate == null) 
+                        || x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
+                        || x.LastModified >= queryParams.FromDate && x.LastModified<= queryParams.ToDate)
+                    && ((string.IsNullOrEmpty(queryParams.Content)
+                        || (EF.Functions.Like(x.Email, $"%{queryParams.Content}%") 
+                        || EF.Functions.Like(x.Type, $"%{queryParams.Content}%") 
+                        || EF.Functions.Like(x.From, $"%{queryParams.Content}%"))))
                     ,
 
                     include: null,
