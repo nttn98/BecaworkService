@@ -12,6 +12,5 @@ namespace BecaworkService.Models
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
 
-
     }
 }

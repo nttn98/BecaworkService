@@ -25,6 +25,22 @@ namespace BecaworkService.Controllers
             return Ok(tempNotifi);
         }
 
+     /*   [HttpGet]
+        [Route("GetNotifications1")]
+        public async Task<IActionResult> GetNotifications1([FromQuery] QueryParams queryParams)
+        {
+            var tempNotifi = await _notificationService.GetNotifications1(queryParams);
+            return Ok(tempNotifi);
+        }*/
+
+        [HttpGet]
+        [Route("GetNotifications2")]
+        public async Task<IActionResult> GetNotifications2([FromQuery] QueryParams queryParams)
+        {
+            var tempNotifi = await _notificationService.GetNotifications2(queryParams);
+            return Ok(tempNotifi);
+        }
+
         [HttpGet]
         [Route("GetNotificationByID/{ID}")]
         public async Task<IActionResult> GetNotificationByID(long ID)

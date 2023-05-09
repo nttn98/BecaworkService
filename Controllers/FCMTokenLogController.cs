@@ -27,6 +27,15 @@ namespace BecaworkService.Controllers
             return Ok(FCMTokenLogs);
         }
 
+        //Get v2
+        [HttpGet]
+        [Route("GetFCMTokenLogs2")]
+        public async Task<IActionResult> GetFCMTokenLogs2([FromQuery] QueryParams queryParams)
+        {
+            var FCMTokenLogs = await _FCMTokenLogService.GetFCMTokenLogs2(queryParams);
+            return Ok(FCMTokenLogs);
+        }
+
         //Get by ID 
         [HttpGet]
         [Route("GetFCMTokenLogByID")]
@@ -35,20 +44,20 @@ namespace BecaworkService.Controllers
             var tempFCMTokenLog = await _FCMTokenLogService.GetFCMTokenLogByID(ID);
             return Ok(tempFCMTokenLog);
         }
-        //Add FCMTokenLog
-        /* [HttpPost]
-         [Route("AddFCMTokenLog")]
-         public async Task<IActionResult> Post(FCMTokenLog objFCMTokenLog)
-         {
-             var tempFCMTokenLog = await _FCMTokenLogService.AddFCMTokenLog(objFCMTokenLog);
-             if (tempFCMTokenLog.Id == 0)
-             {
-                 return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
+        /*  //Add FCMTokenLog
+          [HttpPost]
+          [Route("AddFCMTokenLog")]
+          public async Task<IActionResult> Post(FCMTokenLog objFCMTokenLog)
+          {
+              var tempFCMTokenLog = await _FCMTokenLogService.AddFCMTokenLog(objFCMTokenLog);
+              if (tempFCMTokenLog.Id == 0)
+              {
+                  return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
 
-             }
-             return Ok("Added FCMTokenLog Successfully");
-         }
- */
+              }
+              return Ok("Added FCMTokenLog Successfully");
+          }*/
+
         //Update FCMTokenLog
         [HttpPut]
         [Route("UpdateFCMTokenLog")]
