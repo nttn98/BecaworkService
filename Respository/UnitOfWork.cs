@@ -17,10 +17,14 @@ namespace BecaworkService.Respository
 
         #region Library DBSet Repositories
         private IAsyncRepository<Notification> _notificationRepository;
+        private IAsyncRepository<Mail> _mailRepository;
+        private IAsyncRepository<FCMTokenLog> _fCMTokenLogRepository;
         #endregion
 
         #region LibraryContext Repository
         public IAsyncRepository<Notification> NotificationRepository => _notificationRepository ??= new EfRepository<Notification>(_context);
+        public IAsyncRepository<Mail> MailRepository => _mailRepository ??= new EfRepository<Mail>(_context);
+        public IAsyncRepository<FCMTokenLog> FCMTokenLogRepository => _fCMTokenLogRepository ??= new EfRepository<FCMTokenLog>(_context);
         #endregion
 
         public UnitOfWork(string libraryConnectionString)

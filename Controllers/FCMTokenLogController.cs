@@ -1,4 +1,4 @@
-﻿/*using BecaworkService.Interfaces;
+﻿using BecaworkService.Interfaces;
 using BecaworkService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,20 +44,20 @@ namespace BecaworkService.Controllers
             var tempFCMTokenLog = await _FCMTokenLogService.GetFCMTokenLogByID(ID);
             return Ok(tempFCMTokenLog);
         }
-        //Add FCMTokenLog
-        *//* [HttpPost]
-         [Route("AddFCMTokenLog")]
-         public async Task<IActionResult> Post(FCMTokenLog objFCMTokenLog)
-         {
-             var tempFCMTokenLog = await _FCMTokenLogService.AddFCMTokenLog(objFCMTokenLog);
-             if (tempFCMTokenLog.Id == 0)
-             {
-                 return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
+        /*  //Add FCMTokenLog
+          [HttpPost]
+          [Route("AddFCMTokenLog")]
+          public async Task<IActionResult> Post(FCMTokenLog objFCMTokenLog)
+          {
+              var tempFCMTokenLog = await _FCMTokenLogService.AddFCMTokenLog(objFCMTokenLog);
+              if (tempFCMTokenLog.Id == 0)
+              {
+                  return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
 
-             }
-             return Ok("Added FCMTokenLog Successfully");
-         }
- *//*
+              }
+              return Ok("Added FCMTokenLog Successfully");
+          }*/
+
         //Update FCMTokenLog
         [HttpPut]
         [Route("UpdateFCMTokenLog")]
@@ -77,4 +77,3 @@ namespace BecaworkService.Controllers
         }
     }
 }
-*/

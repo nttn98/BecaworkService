@@ -1,4 +1,4 @@
-﻿/*using BecaworkService.Interfaces;
+﻿using BecaworkService.Interfaces;
 using BecaworkService.Models;
 using BecaworkService.Respository;
 using Microsoft.AspNetCore.Http;
@@ -78,4 +78,3 @@ namespace BecaworkService.Controllers
         }
     }
 }
-*/

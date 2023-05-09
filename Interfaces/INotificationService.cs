@@ -9,6 +9,7 @@ namespace BecaworkService.Interfaces
     public interface INotificationService
     {
         Task<NotificationResponse> GetNotifications(int page, int pageSize);
+
         /*Task<NotificationResponse> GetNotifications1(QueryParams queryParams);*/
         Task<QueryResult<Notification>> GetNotifications2(QueryParams queryParams);
         Task<Notification> GetNotificationByID(long ID);

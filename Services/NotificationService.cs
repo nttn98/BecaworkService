@@ -185,30 +185,27 @@ namespace BecaworkService.Services
                     ["from"] = s => s.From,
                     ["isseen"] = s => s.IsSeen,
                 };
-                if (queryParams.SortBy == null || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
-                {
-                    queryParams.SortBy = "createdtime";
-                }
 
-                var notification = await unitOfWork.NotificationRepository
-                    .FindAll(predicate: x => x.Id > 0
-                    && ((queryParams.FromDate == null || queryParams.ToDate == null) 
+                var tempNotification = await unitOfWork.NotificationRepository
+                    .FindAll(predicate: x =>
+                    ((queryParams.FromDate == null || queryParams.ToDate == null)
                         || x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
-                        || x.LastModified >= queryParams.FromDate && x.LastModified<= queryParams.ToDate)
+                        || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)
                     && ((string.IsNullOrEmpty(queryParams.Content)
-                        || (EF.Functions.Like(x.Email, $"%{queryParams.Content}%") 
-                        || EF.Functions.Like(x.Type, $"%{queryParams.Content}%") 
-                        || EF.Functions.Like(x.From, $"%{queryParams.Content}%"))))
-                    ,
+                        || (EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.Type, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.Content, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.From, $"%{queryParams.Content}%")))),
 
                     include: null,
-                    orderBy: source => String.IsNullOrEmpty(queryParams.SortBy) ? source.OrderByDescending(d => d.Id)
-                                                                                : queryParams.IsSortAscending ?
-                                                                                source.OrderBy(columnsMap[queryParams.SortBy]) :
-                                                                                source.OrderByDescending(columnsMap[queryParams.SortBy]),
+                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower())) 
+                                                                                ? source.OrderBy(d => d.CreatedTime)
+                                                                                : queryParams.IsSortAscending 
+                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy]) 
+                                                                                : source.OrderByDescending(columnsMap[queryParams.SortBy]),
                     disableTracking: true,
                     pagingSpecification: pagingSpecification);
-                result = notification;
+                result = tempNotification;
             }
 
             return result;
