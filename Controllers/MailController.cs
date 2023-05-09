@@ -27,7 +27,7 @@ namespace BecaworkService.Controllers
             var mails = await _mailService.GetMails(page, pageSize);
             return Ok(mails);
         }
-        
+
         //Get Mail v2
         [HttpGet]
         [Route("GetMails2")]

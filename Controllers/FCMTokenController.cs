@@ -1,4 +1,4 @@
-﻿using BecaworkService.Interfaces;
+﻿/*using BecaworkService.Interfaces;
 using BecaworkService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -60,4 +60,4 @@ namespace BecaworkService.Controllers
             return new JsonResult("Delete FCMToken Successfully");
         }
     }
-}
+}*/
