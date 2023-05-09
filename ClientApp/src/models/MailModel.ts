@@ -1,17 +1,16 @@
 export type MailModel = {
     id: bigint;
     email: string;
+    emailContent: string
     subject: string;
     createby: string;
-    // key: number;
-    // id: number;
-    // createdTime: string;
-    // type: string;
-    // content: string;
-    // isRead: number;
-    // email: string;
-    // lastModified: string;
-    // from: string;
-    // url: string;
-    // isSeen: number;
+    createTime :string;
+    isSend : boolean;
+    sendTime : string;
+    sentStatus : string;
+    emailCC : string;
+    emailBCC: string;
+    fromDate: string;
+    toDate : string;
+    mailType: bigint;
   };
