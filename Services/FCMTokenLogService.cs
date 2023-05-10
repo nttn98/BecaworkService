@@ -171,6 +171,7 @@ namespace BecaworkService.Services
             }
             return result;
         }
+
         public async Task<FCMTokenLog> GetFCMTokenLogByID(long ID)
         {
             var tempGetFCMTokenLog = await _context.FCMTokenLogs.FindAsync(ID);
