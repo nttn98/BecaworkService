@@ -13,6 +13,8 @@ namespace BecaworkService.Respository
         public DbSet<FCMTokenLog> FCMTokenLogs { get; set; }
         public DbSet<FCMToken> FCMTokens { get; set; }
         public DbSet<ElectrolyticToken> ElectrolyticTokens { get; set; }
+        public DbSet<ElectrolyticTokenLog> ElectrolyticTokenLogs { get; set; }
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,6 +29,7 @@ namespace BecaworkService.Respository
             builder.Entity<Notification>().ToTable("Notification");
             builder.Entity<FCMTokenLog>().ToTable("FCMTokenLog");
             builder.Entity<ElectrolyticTokenLog>().ToTable("ElectrolyticTokenLog");
+            builder.Entity<ElectrolyticToken>().ToTable("ElectrolyticToken");
 
         }
     }

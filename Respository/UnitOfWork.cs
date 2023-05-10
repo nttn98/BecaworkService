@@ -21,6 +21,7 @@ namespace BecaworkService.Respository
         private IAsyncRepository<FCMTokenLog> _fCMTokenLogRepository;
         private IAsyncRepository<FCMToken> _fCMTokenRepository;
         private IAsyncRepository<ElectrolyticToken> _electrolyticTokenRepository;
+        private IAsyncRepository<ElectrolyticTokenLog> _electrolyticTokenLogRepository;
         #endregion
 
         #region LibraryContext Repository
@@ -29,7 +30,7 @@ namespace BecaworkService.Respository
         public IAsyncRepository<FCMTokenLog> FCMTokenLogRepository => _fCMTokenLogRepository ??= new EfRepository<FCMTokenLog>(_context);
         public IAsyncRepository<FCMToken> FCMTokenRepository => _fCMTokenRepository ??= new EfRepository<FCMToken>(_context);
         public IAsyncRepository<ElectrolyticToken> ElectrolyticTokenRepository => _electrolyticTokenRepository ??= new EfRepository<ElectrolyticToken>(_context);
-
+        public IAsyncRepository<ElectrolyticTokenLog> ElectrolyticTokenLogRepository => _electrolyticTokenLogRepository ??= new EfRepository<ElectrolyticTokenLog>(_context);
         #endregion
 
         public UnitOfWork(string libraryConnectionString)
