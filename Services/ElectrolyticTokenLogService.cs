@@ -54,6 +54,8 @@ namespace BecaworkService.Services
                 var columnsMap = new Dictionary<string, Expression<Func<ElectrolyticTokenLog, object>>>()
                 {
                     ["id"] = s => s.Id,
+                    ["request"] = s => s.Request,
+                    ["response"] = s => s.Response,
                     ["statuscode"] = s => s.StatusCode,
                     ["lastmodified"] = s => s.LastModified,
                     ["createdtime"] = s => s.CreatedTime
@@ -62,7 +64,13 @@ namespace BecaworkService.Services
                     .FindAll(predicate: x =>
                     ((queryParams.FromDate == null || queryParams.ToDate == null)
                     || (x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
-                    || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)),
+                    || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)
+                     && ((string.IsNullOrEmpty(queryParams.Content)
+                        || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.Request, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.Response, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.StatusCode.ToString(), $"%{queryParams.Content}%"))))),
+
                     include: null,
 
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
