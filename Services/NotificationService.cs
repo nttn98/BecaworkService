@@ -192,16 +192,20 @@ namespace BecaworkService.Services
                         || x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
                         || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)
                     && ((string.IsNullOrEmpty(queryParams.Content)
-                        || (EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
+                        || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.CreatedTime.ToString(), $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Type, $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Content, $"%{queryParams.Content}%")
-                        || EF.Functions.Like(x.From, $"%{queryParams.Content}%")))),
+                        || EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.Type, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.From, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.Url, $"%{queryParams.Content}%")))),
 
                     include: null,
-                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower())) 
+                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
                                                                                 ? source.OrderBy(d => d.CreatedTime)
-                                                                                : queryParams.IsSortAscending 
-                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()]) 
+                                                                                : queryParams.IsSortAscending
+                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
                     disableTracking: true,
                     pagingSpecification: pagingSpecification);
