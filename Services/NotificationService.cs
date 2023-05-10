@@ -201,8 +201,8 @@ namespace BecaworkService.Services
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower())) 
                                                                                 ? source.OrderBy(d => d.CreatedTime)
                                                                                 : queryParams.IsSortAscending 
-                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy]) 
-                                                                                : source.OrderByDescending(columnsMap[queryParams.SortBy]),
+                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()]) 
+                                                                                : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
                     disableTracking: true,
                     pagingSpecification: pagingSpecification);
                 result = tempNotification;
