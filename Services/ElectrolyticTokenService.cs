@@ -1,9 +1,13 @@
-﻿using BecaworkService.Interfaces;
+﻿using BecaworkService.Helper;
+using BecaworkService.Interfaces;
 using BecaworkService.Models;
+using BecaworkService.Models.Responses;
 using BecaworkService.Respository;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Services
@@ -67,6 +71,43 @@ namespace BecaworkService.Services
             }
 
             return ETokens;
+        }
+
+        public async Task<QueryResult<ElectrolyticToken>> GetElectrolyticTokens2(QueryParams queryParams)
+        {
+            var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
+            var result = new QueryResult<ElectrolyticToken>();
+            if (queryParams.Page == 0)
+            {
+                queryParams.Page = 1;
+            }
+            var pagingSpecification = new PagingSpecification(queryParams);
+            using (var uniOfwork = new UnitOfWork(connectionString))
+            {
+                var columnsMap = new Dictionary<string, Expression<Func<ElectrolyticToken, object>>>()
+                {
+                    ["id"] = s => s.Id,
+                    ["statuscode"] = s => s.StatusCode,
+                    ["lastmodified"] = s => s.LastModified,
+                    ["createdtime"] = s => s.CreatedTime
+                };
+                var tempElectrolyticToken = await uniOfwork.ElectrolyticTokenRepository
+                    .FindAll(predicate: x =>
+                    ((queryParams.FromDate == null || queryParams.ToDate == null)
+                    || (x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
+                    || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)),
+                    include: null,
+
+                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
+                                                                                ? source.OrderBy(d => d.CreatedTime)
+                                                                                : queryParams.IsSortAscending
+                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy])
+                                                                                : source.OrderByDescending(columnsMap[queryParams.SortBy]),
+                    disableTracking: true,
+                    pagingSpecification: pagingSpecification);
+                result = tempElectrolyticToken;
+            }
+            return result;
         }
 
         public async Task<ElectrolyticToken> UpdateElectrolyticToken(ElectrolyticToken objElectrolyticToken)
