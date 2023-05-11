@@ -210,13 +210,18 @@ namespace BecaworkService.Services
                 
                 var tempMail = await uniOfWork.MailRepository
                     .FindAll(predicate: x => ((queryParams.FromDate == null || queryParams.ToDate == null)
-                    || x.CreateTime >= queryParams.FromDate && x.CreateTime <= queryParams.ToDate)
+                    || x.CreateTime >= queryParams.FromDate && x.CreateTime <= queryParams.ToDate
+                    || x.SendTime >= queryParams.FromDate && x.SendTime <= queryParams.ToDate)
                     && ((String.IsNullOrEmpty(queryParams.Content)
-                    || (EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
+                    || (EF.Functions.Like(x.ID.ToString(), $"%{queryParams.Content}%")
+                    || EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
+                    || EF.Functions.Like(x.EmailContent, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.CreateBy, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.Subject, $"%{queryParams.Content}%")
+                    || EF.Functions.Like(x.SentStatus, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.EmailCC, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.Location, $"%{queryParams.Content}%")
+                    || EF.Functions.Like(x.MailType.ToString(), $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.Organizer, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.UID, $"%{queryParams.Content}%")))),
                     include: null,
