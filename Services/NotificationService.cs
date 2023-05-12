@@ -191,8 +191,8 @@ namespace BecaworkService.Services
                         || x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
                         || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)
 
-                    && (queryParams.isRead == null || queryParams.isRead == x.IsRead)
                     && (queryParams.isSeen == null || queryParams.isSeen == x.IsSeen)
+                    && (queryParams.isRead == null || queryParams.isRead == x.IsRead)
 
                     && (string.IsNullOrEmpty(queryParams.Content)
                         || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
