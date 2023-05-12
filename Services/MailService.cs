@@ -212,6 +212,9 @@ namespace BecaworkService.Services
                     .FindAll(predicate: x => ((queryParams.FromDate == null || queryParams.ToDate == null)
                     || x.CreateTime >= queryParams.FromDate && x.CreateTime <= queryParams.ToDate
                     || x.SendTime >= queryParams.FromDate && x.SendTime <= queryParams.ToDate)
+
+                    && (queryParams.isSend == null || queryParams.isSend == x.IsSend)
+
                     && ((String.IsNullOrEmpty(queryParams.Content)
                     || (EF.Functions.Like(x.ID.ToString(), $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
