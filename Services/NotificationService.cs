@@ -187,29 +187,36 @@ namespace BecaworkService.Services
                 };
 
                 var tempNotification = await unitOfWork.NotificationRepository
-                    .FindAll(predicate: x =>
-                    ((queryParams.FromDate == null || queryParams.ToDate == null)
+                    .FindAll(predicate: x => ((queryParams.FromDate == null || queryParams.ToDate == null)
                         || x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
                         || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)
-                    && ((string.IsNullOrEmpty(queryParams.Content)
-                        || (EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
+
+                    && (queryParams.isRead == null || queryParams.isRead == x.IsRead)
+                    && (queryParams.isSeen == null || queryParams.isSeen == x.IsSeen)
+
+                    && (string.IsNullOrEmpty(queryParams.Content)
+                        || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Type, $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Content, $"%{queryParams.Content}%")
-                        || EF.Functions.Like(x.From, $"%{queryParams.Content}%")))),
+                        || EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.Type, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.From, $"%{queryParams.Content}%")
+                        || EF.Functions.Like(x.Url, $"%{queryParams.Content}%"))),
 
                     include: null,
-                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower())) 
+                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
                                                                                 ? source.OrderBy(d => d.CreatedTime)
-                                                                                : queryParams.IsSortAscending 
-                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy]) 
-                                                                                : source.OrderByDescending(columnsMap[queryParams.SortBy]),
+                                                                                : queryParams.IsSortAscending
+                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
+                                                                                : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
                     disableTracking: true,
-                    pagingSpecification: pagingSpecification);
+                    pagingSpecification: pagingSpecification); ;
                 result = tempNotification;
             }
 
             return result;
         }
+
 
         public async Task<Notification> GetNotificationByID(long ID)
         {
