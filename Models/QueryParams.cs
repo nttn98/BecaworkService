@@ -11,6 +11,6 @@ namespace BecaworkService.Models
         public string Content { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
-
+        public bool? IsRead { get; set; }
     }
 }

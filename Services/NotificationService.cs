@@ -195,7 +195,8 @@ namespace BecaworkService.Services
                         || (EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Type, $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Content, $"%{queryParams.Content}%")
-                        || EF.Functions.Like(x.From, $"%{queryParams.Content}%")))),
+                        || EF.Functions.Like(x.From, $"%{queryParams.Content}%")))
+                    && (queryParams.IsRead == null || x.IsRead == queryParams.IsRead)),
 
                     include: null,
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower())) 
