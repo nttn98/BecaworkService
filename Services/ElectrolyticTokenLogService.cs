@@ -8,10 +8,11 @@ using System.Linq;
 using BecaworkService.Helper;
 using BecaworkService.Models.Responses;
 using System.Linq.Expressions;
+using BecaworkService.Interfaces;
 
 namespace BecaworkService.Services
 {
-    public class ElectrolyticTokenLogService
+    public class ElectrolyticTokenLogService : IElectrolyticTokenLogService
     {
         private readonly BecaworkDbContext _context;
 
@@ -85,33 +86,33 @@ namespace BecaworkService.Services
             return result;
         }
 
-        public async Task<ElectrolyticTokenLog> GetFCMTokenLogByID(long ID)
+        public async Task<ElectrolyticTokenLog> GetElectrolyticTokenLogByID(long ID)
         {
             var ETokenLog = await _context.ElectrolyticTokenLogs.FindAsync(ID);
             return ETokenLog;
         }
 
-        /*    public async Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog)
-            {
-                _context.FCMTokenLogs.Add(objFCMTokenLog);
-                await _context.SaveChangesAsync();
-                return objFCMTokenLog;
-            }*/
-
-        public async Task<ElectrolyticTokenLog> UpdateFCMTokenLog(ElectrolyticTokenLog objFCMTokenLog)
+        public async Task<ElectrolyticTokenLog> AddElectrolyticTokenLog(ElectrolyticTokenLog objETokenLog)
         {
-            _context.Entry(objFCMTokenLog).State = EntityState.Modified;
+            _context.ElectrolyticTokenLogs.Add(objETokenLog);
             await _context.SaveChangesAsync();
-            return objFCMTokenLog;
+            return objETokenLog;
         }
 
-        public bool DeleteFCMTokenLog(long ID)
+        public async Task<ElectrolyticTokenLog> UpdateElectrolyticTokenLog(ElectrolyticTokenLog objETokenLog)
+        {
+            _context.Entry(objETokenLog).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return objETokenLog;
+        }
+
+        public bool DeleteElectrolyticTokenLog(long ID)
         {
             bool result = false;
-            var tempFCMTokenLog = _context.FCMTokenLogs.Find(ID);
-            if (tempFCMTokenLog != null)
+            var tempETokenLog = _context.ElectrolyticTokenLogs.Find(ID);
+            if (tempETokenLog != null)
             {
-                _context.Entry(tempFCMTokenLog).State = EntityState.Deleted;
+                _context.Entry(tempETokenLog).State = EntityState.Deleted;
                 _context.SaveChanges();
                 result = true;
             }
