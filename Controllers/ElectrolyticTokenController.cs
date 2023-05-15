@@ -1,4 +1,4 @@
-﻿/*using BecaworkService.Interfaces;
+﻿using BecaworkService.Interfaces;
 using BecaworkService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +24,15 @@ namespace BecaworkService.Controllers
             var ElectrolyticTokens = await _eTokenService.GetElectrolyticTokens(page, pageSize);
             return Ok(ElectrolyticTokens);
         }
+
+        [HttpGet]
+        [Route("GetElectrolyticTokens")]
+        public async Task<IActionResult> GetElectrolyticTokens2([FromQuery] QueryParams queryParams)
+        {
+            var ElectrolyticTokens = await _eTokenService.GetElectrolyticTokens2(queryParams);
+            return Ok(ElectrolyticTokens);
+        }
+
 
         [HttpGet]
         [Route("GetElectrolyticTokenByID/{ID}")]
@@ -61,4 +70,4 @@ namespace BecaworkService.Controllers
         }
     }
 }
-*/
+

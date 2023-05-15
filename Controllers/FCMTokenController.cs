@@ -1,4 +1,4 @@
-﻿/*using BecaworkService.Interfaces;
+﻿using BecaworkService.Interfaces;
 using BecaworkService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +22,14 @@ namespace BecaworkService.Controllers
         {
             var FCMTokens = await _fCMTokenService.GetFCMTokens(page, pageSize);
             return Ok(FCMTokens);
+        }
+
+        [HttpGet]
+        [Route("GetElectrolyticTokens")]
+        public async Task<IActionResult> GetFCMTokens2([FromQuery] QueryParams queryParams)
+        {
+            var fCMTokens = await _fCMTokenService.GetFCMTokens2(queryParams);
+            return Ok(fCMTokens);
         }
 
         [HttpGet]
@@ -60,4 +68,4 @@ namespace BecaworkService.Controllers
             return new JsonResult("Delete FCMToken Successfully");
         }
     }
-}*/
+}
