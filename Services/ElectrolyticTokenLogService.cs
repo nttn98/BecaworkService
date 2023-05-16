@@ -57,7 +57,7 @@ namespace BecaworkService.Services
                     ["id"] = s => s.Id,
                     ["request"] = s => s.Request,
                     ["response"] = s => s.Response,
-                    ["mail"] = s => s.Mail,
+                    ["statuscode"] = s => s.StatusCode,
                     ["lastmodified"] = s => s.LastModified,
                     ["createdtime"] = s => s.CreatedTime
                 };
@@ -70,7 +70,7 @@ namespace BecaworkService.Services
                         || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Request, $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Response, $"%{queryParams.Content}%")
-                        || EF.Functions.Like(x.Mail.ToString(), $"%{queryParams.Content}%"))))),
+                        || EF.Functions.Like(x.StatusCode.ToString(), $"%{queryParams.Content}%"))))),
 
                     include: null,
 

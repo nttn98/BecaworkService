@@ -149,7 +149,7 @@ namespace BecaworkService.Services
                 var columnsMap = new Dictionary<string, Expression<Func<FCMTokenLog, object>>>()
                 {
                     ["id"] = s => s.Id,
-                    ["mail"] = s => s.Mail,
+                    ["statuscode"] = s => s.StatusCode,
                     ["request"] = s => s.Request,
                     ["response"] = s => s.Response,
                     ["lastmodified"] = s => s.LastModified,
@@ -162,7 +162,7 @@ namespace BecaworkService.Services
                     || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate))
                     && ((string.IsNullOrEmpty(queryParams.Content)
                     || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
-                    || EF.Functions.Like(x.Mail.ToString(), $"%{queryParams.Content}%")))),
+                    || EF.Functions.Like(x.StatusCode.ToString(), $"%{queryParams.Content}%")))),
                     include: null,
 
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
