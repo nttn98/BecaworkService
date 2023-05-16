@@ -158,6 +158,7 @@ namespace BecaworkService.Services
                     ((queryParams.FromDate == null || queryParams.ToDate == null)
                     || (x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
                     || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate))
+
                     && ((string.IsNullOrEmpty(queryParams.Content)
                     || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.StatusCode.ToString(), $"%{queryParams.Content}%")))),
