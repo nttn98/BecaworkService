@@ -87,7 +87,9 @@ namespace BecaworkService.Services
                 var columnsMap = new Dictionary<string, Expression<Func<ElectrolyticToken, object>>>()
                 {
                     ["id"] = s => s.Id,
-                    ["statuscode"] = s => s.StatusCode,
+                    ["mail"] = s => s.Mail,
+                    ["request"] = s => s.Request,
+                    ["response"] = s => s.Response,
                     ["lastmodified"] = s => s.LastModified,
                     ["createdtime"] = s => s.CreatedTime
                 };
@@ -100,7 +102,7 @@ namespace BecaworkService.Services
                         || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Request, $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Response, $"%{queryParams.Content}%")
-                        || EF.Functions.Like(x.StatusCode.ToString(), $"%{queryParams.Content}%"))))),
+                        || EF.Functions.Like(x.Mail.ToString(), $"%{queryParams.Content}%"))))),
                     include: null,
 
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))

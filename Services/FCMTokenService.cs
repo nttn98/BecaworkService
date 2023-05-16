@@ -86,7 +86,9 @@ namespace BecaworkService.Services
                 var columnsMap = new Dictionary<string, Expression<Func<FCMToken, object>>>()
                 {
                     ["id"] = s => s.Id,
-                    ["statuscode"] = s => s.Mail,
+                    ["mail"] = s => s.Mail,
+                    ["request"] = s => s.Request,
+                    ["response"] = s => s.Response,
                     ["lastmodified"] = s => s.LastModified,
                     ["createdtime"] = s => s.CreatedTime
                 };
