@@ -157,7 +157,11 @@ namespace BecaworkService.Services
                     .FindAll(predicate: x =>
                     ((queryParams.FromDate == null || queryParams.ToDate == null)
                     || (x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
-                    || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)),
+                    || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate))
+
+                    && ((string.IsNullOrEmpty(queryParams.Content)
+                    || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
+                    || EF.Functions.Like(x.StatusCode.ToString(), $"%{queryParams.Content}%")))),
                     include: null,
 
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
@@ -171,6 +175,7 @@ namespace BecaworkService.Services
             }
             return result;
         }
+
         public async Task<FCMTokenLog> GetFCMTokenLogByID(long ID)
         {
             var tempGetFCMTokenLog = await _context.FCMTokenLogs.FindAsync(ID);
