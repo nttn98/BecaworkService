@@ -207,7 +207,7 @@ namespace BecaworkService.Services
                     ["organizermail"] = s => s.OrganizerMail,*/
                     ["uid"] = s => s.UID
                 };
-                
+
                 var tempMail = await uniOfWork.MailRepository
                     .FindAll(predicate: x => ((queryParams.FromDate == null || queryParams.ToDate == null)
                     || x.CreateTime >= queryParams.FromDate && x.CreateTime <= queryParams.ToDate
@@ -227,9 +227,11 @@ namespace BecaworkService.Services
                     || EF.Functions.Like(x.MailType.ToString(), $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.Organizer, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.UID, $"%{queryParams.Content}%")))),
+
                     include: null,
-                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower())) 
-                                                                                ? source.OrderBy(d => d.CreateTime)
+
+                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
+                                                                                ? source.OrderByDescending(d => d.CreateTime)
                                                                                 : queryParams.IsSortAscending
                                                                                 ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),

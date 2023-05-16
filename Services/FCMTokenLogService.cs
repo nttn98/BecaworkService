@@ -165,7 +165,7 @@ namespace BecaworkService.Services
                     include: null,
 
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
-                                                                                ? source.OrderBy(d => d.CreatedTime)
+                                                                                ? source.OrderByDescending(d => d.CreatedTime)
                                                                                 : queryParams.IsSortAscending
                                                                                 ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
