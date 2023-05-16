@@ -1,5 +1,5 @@
 export type MailModel = {
-    id: bigint;
+    id: number;
     email: string;
     emailContent: string
     subject: string;
@@ -12,5 +12,5 @@ export type MailModel = {
     emailBCC: string;
     fromDate: string;
     toDate : string;
-    mailType: bigint;
+    mailType: number;
   };

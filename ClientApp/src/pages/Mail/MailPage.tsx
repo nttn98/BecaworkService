@@ -3,6 +3,7 @@ import {
   Form,
   Input,
   Pagination,
+  PaginationProps,
   Space,
   Table,
   Tag,
@@ -43,34 +44,52 @@ const columns: ColumnsType<MailModel> = [
   },
 ];
 
-const pageSize = 10;
+//const pageSize = 10;
 
 export default function MailPage() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [totalItems, settotalItems] = useState();
+  const [pageSize, setPageSize] = useState(10);
+
+  const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
+    current,
+    pageSize
+  ) => {
+    console.log(current, pageSize);
+    setPageSize(pageSize);
+  };
 
   const fetchData = async () => {
     setLoading(true);
     try {
       const result = await axios.get(
-        `/api/Mail/GetMails?page=${page}&pageSize=${pageSize}`
+        `/api/Mail/GetMails2?page=${page}&pageSize=${pageSize}`
       );
+      console.log(result);
       if (result.status === 200) {
-        setData(result.data);
+        setData(result.data.items);
+        settotalItems(result.data.totalItems);
       }
     } catch {
       message.error("Loi");
     }
     setLoading(false);
   };
-
   useEffect(() => {
     fetchData();
   }, [page, pageSize]);
 
   return (
     <div>
+      <Input.Search
+        allowClear
+        size="large"
+        style={{ width: 500 }}
+        placeholder="Search..."
+      />
+
       {/* <Form
         name="basic"
         labelCol={{ span: 5 }}
@@ -100,12 +119,15 @@ export default function MailPage() {
         pagination={false}
         loading={loading}
       />
-      <Pagination
-        current={page}
-        total={150}
-        pageSize={pageSize}
-        onChange={(pg) => setPage(pg)}
-      />
+      <div className="pagination">
+        <Pagination
+          current={page}
+          total={totalItems}
+          pageSize={pageSize}
+          onShowSizeChange={onShowSizeChange}
+          onChange={(page) => setPage(page)}
+        />
+      </div>
     </div>
   );
 }

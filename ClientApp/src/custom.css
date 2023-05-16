@@ -54,3 +54,12 @@ justify-content: space-between;
 .divs > div:nth-child(3) {
   background: yellow;
 }
+.pagination > ul {
+  float: right;
+}
+.detailPage-btn {
+  float: right;
+}
+.detailPage{
+  padding: 15px;
+}

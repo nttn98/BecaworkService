@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Table, { ColumnsType } from "antd/es/table";
 import { MailModel } from "../../models/MailModel";
-import { Col, Divider, Row, Space } from "antd";
+import { Button, Col, Divider, Row, Space } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
@@ -46,6 +46,7 @@ const columns: ColumnsType<MailModel> = [
 export const MailDetailPage = () => {
   const { id } = useParams();
   const [data, setData] = useState<MailModel | undefined>();
+  let navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -59,7 +60,7 @@ export const MailDetailPage = () => {
   }, []);
 
   return (
-    <div>
+    <div className="detailPage">
       <h1>Mail Details</h1>
       {data ? (
         <div className="showDetails">
@@ -133,6 +134,13 @@ export const MailDetailPage = () => {
       ) : (
         <p>Not found</p>
       )}
+      <Button
+        className="detailPage-btn"
+        type="primary"
+        onClick={() => navigate(-1)}
+      >
+        Back
+      </Button>
     </div>
   );
 };
