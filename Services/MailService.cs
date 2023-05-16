@@ -207,24 +207,32 @@ namespace BecaworkService.Services
                     ["organizermail"] = s => s.OrganizerMail,*/
                     ["uid"] = s => s.UID
                 };
-
+                
                 var tempMail = await uniOfWork.MailRepository
                     .FindAll(predicate: x => ((queryParams.FromDate == null || queryParams.ToDate == null)
-                    || x.CreateTime >= queryParams.FromDate && x.CreateTime <= queryParams.ToDate)
+                    || x.CreateTime >= queryParams.FromDate && x.CreateTime <= queryParams.ToDate
+                    || x.SendTime >= queryParams.FromDate && x.SendTime <= queryParams.ToDate)
+
+                    && (queryParams.isSend == null || queryParams.isSend == x.IsSend)
+
                     && ((String.IsNullOrEmpty(queryParams.Content)
-                    || (EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
+                    || (EF.Functions.Like(x.ID.ToString(), $"%{queryParams.Content}%")
+                    || EF.Functions.Like(x.Email, $"%{queryParams.Content}%")
+                    || EF.Functions.Like(x.EmailContent, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.CreateBy, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.Subject, $"%{queryParams.Content}%")
+                    || EF.Functions.Like(x.SentStatus, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.EmailCC, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.Location, $"%{queryParams.Content}%")
+                    || EF.Functions.Like(x.MailType.ToString(), $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.Organizer, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.UID, $"%{queryParams.Content}%")))),
                     include: null,
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower())) 
                                                                                 ? source.OrderBy(d => d.CreateTime)
                                                                                 : queryParams.IsSortAscending
-                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy])
-                                                                                : source.OrderByDescending(columnsMap[queryParams.SortBy]),
+                                                                                ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
+                                                                                : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
                     disableTracking: true,
                     pagingSpecification: pagingSpecification);
                 result = tempMail;
