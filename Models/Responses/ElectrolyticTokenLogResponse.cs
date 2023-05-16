@@ -8,4 +8,4 @@ namespace BecaworkService.Models.Responses
         public ICollection<ElectrolyticTokenLog> Data { get; set; }
     }
 }
-}
+
