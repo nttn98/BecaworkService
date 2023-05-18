@@ -2,7 +2,19 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Table, { ColumnsType } from "antd/es/table";
 import { MailModel } from "../../models/MailModel";
-import { Form, Button, Col, Divider, Input, Row, Space, Select } from "antd";
+import {
+  Form,
+  Button,
+  Col,
+  Divider,
+  Input,
+  Row,
+  Space,
+  Select,
+  Modal,
+  Alert,
+  message,
+} from "antd";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
@@ -11,12 +23,15 @@ import moment from "moment";
 export const MailUpdatePage = () => {
   const { id } = useParams();
   const [data, setData] = useState<MailModel | undefined>();
+  const [showAlert, setShowAlert] = useState(false);
 
   const onFinish = (values: any) => {
     console.log(values);
     axios.put("/api/mail/UpdateMail", values).then((res) => {
       console.log(res.data);
     });
+
+    setShowAlert(true);
   };
 
   let navigate = useNavigate();
@@ -32,6 +47,7 @@ export const MailUpdatePage = () => {
 
   return (
     <div className="detailPage">
+      {showAlert && <Alert message="Success Text" type="success" closable />}
       <h1>Mail Details</h1>
 
       {data ? (
