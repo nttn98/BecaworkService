@@ -11,29 +11,29 @@ namespace BecaworkService.Controllers
     [ApiController]
     public class FCMTokenLogController : ControllerBase
     {
-        public readonly IFCMTokenLogService _FCMTokenLogService;
+        public readonly IFCMTokenLogService _fCMTokenLogService;
 
-        public FCMTokenLogController(IFCMTokenLogService FCMTokenService)
+        public FCMTokenLogController(IFCMTokenLogService fCMTokenLogService)
         {
-            _FCMTokenLogService = FCMTokenService ?? throw new ArgumentNullException(nameof(FCMTokenService));
+            _fCMTokenLogService = fCMTokenLogService ?? throw new ArgumentNullException(nameof(fCMTokenLogService));
         }
 
         //Get 
-        [HttpGet]
+        /*[HttpGet]
         [Route("GetFCMTokenLogs")]
         public async Task<IActionResult> GetFCMTokenLogs(int page, int pageSize)
         {
-            var FCMTokenLogs = await _FCMTokenLogService.GetFCMTokenLogs(page, pageSize);
+            var FCMTokenLogs = await _fCMTokenLogService.GetFCMTokenLogs(page, pageSize);
             return Ok(FCMTokenLogs);
-        }
+        }*/
 
         //Get v2
         [HttpGet]
-        [Route("GetFCMTokenLogs2")]
-        public async Task<IActionResult> GetFCMTokenLogs2([FromQuery] QueryParams queryParams)
+        [Route("GetFCMTokenLogs")]
+        public async Task<IActionResult> GetFCMTokenLogs([FromQuery] QueryParams queryParams)
         {
-            var FCMTokenLogs = await _FCMTokenLogService.GetFCMTokenLogs2(queryParams);
-            return Ok(FCMTokenLogs);
+            var tempFCMTokenLogs = await _fCMTokenLogService.GetFCMTokenLogs(queryParams);
+            return Ok(tempFCMTokenLogs);
         }
 
         //Get by ID 
@@ -41,7 +41,7 @@ namespace BecaworkService.Controllers
         [Route("GetFCMTokenLogByID")]
         public async Task<IActionResult> GetFCMTokenLogByID(long ID)
         {
-            var tempFCMTokenLog = await _FCMTokenLogService.GetFCMTokenLogByID(ID);
+            var tempFCMTokenLog = await _fCMTokenLogService.GetFCMTokenLogByID(ID);
             return Ok(tempFCMTokenLog);
         }
         /*  //Add FCMTokenLog
@@ -63,7 +63,7 @@ namespace BecaworkService.Controllers
         [Route("UpdateFCMTokenLog")]
         public async Task<IActionResult> Put(FCMTokenLog objFCMTokenLog)
         {
-            await _FCMTokenLogService.UpdateFCMTokenLog(objFCMTokenLog);
+            await _fCMTokenLogService.UpdateFCMTokenLog(objFCMTokenLog);
             return Ok("Update FCMTokenLog Successfully");
         }
 
@@ -72,7 +72,7 @@ namespace BecaworkService.Controllers
         [Route("DeleteFCMTokenLog")]
         public JsonResult DeleteFCMTokenLog(long ID)
         {
-            _FCMTokenLogService.DeleteFCMTokenLog(ID);
+            _fCMTokenLogService.DeleteFCMTokenLog(ID);
             return new JsonResult("Delete FCMTokenLog Successfully");
         }
     }

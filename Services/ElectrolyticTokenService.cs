@@ -21,21 +21,21 @@ namespace BecaworkService.Services
             _context = context;
         }
 
-        public async Task<ElectrolyticToken> AddElectrolyticToken(ElectrolyticToken objElectrolyticToken)
+        public async Task<ElectrolyticToken> AddElectrolyticToken(ElectrolyticToken objEToken)
         {
-            _context.ElectrolyticTokens.Add(objElectrolyticToken);
+            _context.ElectrolyticTokens.Add(objEToken);
             await _context.SaveChangesAsync();
-            return objElectrolyticToken;
+            return objEToken;
         }
 
         public bool DeteleElectrolyticToken(long ID)
         {
             bool result = false;
-            var EToken = _context.ElectrolyticTokens.Find(ID);
+            var tempEToken = _context.ElectrolyticTokens.Find(ID);
 
-            if (EToken != null)
+            if (tempEToken != null)
             {
-                _context.Entry(EToken).State = EntityState.Deleted;
+                _context.Entry(tempEToken).State = EntityState.Deleted;
                 _context.SaveChanges();
                 result = true;
             }
@@ -53,7 +53,7 @@ namespace BecaworkService.Services
             return tempEToken;
         }
 
-        public async Task<IEnumerable<ElectrolyticToken>> GetElectrolyticTokens(int page, int pageSize)
+       /* public async Task<IEnumerable<ElectrolyticToken>> GetElectrolyticTokens(int page, int pageSize)
         {
             var ETokens = new List<ElectrolyticToken>();
 
@@ -71,9 +71,9 @@ namespace BecaworkService.Services
             }
 
             return ETokens;
-        }
+        }*/
 
-        public async Task<QueryResult<ElectrolyticToken>> GetElectrolyticTokens2(QueryParams queryParams)
+        public async Task<QueryResult<ElectrolyticToken>> GetElectrolyticTokens(QueryParams queryParams)
         {
             var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
             var result = new QueryResult<ElectrolyticToken>();
@@ -92,7 +92,7 @@ namespace BecaworkService.Services
                     ["lastmodified"] = s => s.LastModified,
                     ["createdtime"] = s => s.CreatedTime
                 };
-                var tempElectrolyticToken = await uniOfwork.ElectrolyticTokenRepository
+                var tempEToken = await uniOfwork.ElectrolyticTokenRepository
                     .FindAll(predicate: x =>
                     ((queryParams.FromDate == null || queryParams.ToDate == null)
                     || (x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
@@ -110,16 +110,16 @@ namespace BecaworkService.Services
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy]),
                     disableTracking: true,
                     pagingSpecification: pagingSpecification);
-                result = tempElectrolyticToken;
+                result = tempEToken;
             }
             return result;
         }
 
-        public async Task<ElectrolyticToken> UpdateElectrolyticToken(ElectrolyticToken objElectrolyticToken)
+        public async Task<ElectrolyticToken> UpdateElectrolyticToken(ElectrolyticToken objEToken)
         {
-            _context.Entry(objElectrolyticToken).State = EntityState.Modified;
+            _context.Entry(objEToken).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return objElectrolyticToken;
+            return objEToken;
         }
     }
 }

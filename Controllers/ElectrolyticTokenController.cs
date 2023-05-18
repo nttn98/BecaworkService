@@ -17,19 +17,19 @@ namespace BecaworkService.Controllers
             _eTokenService = eTokenService ?? throw new ArgumentNullException(nameof(eTokenService));
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Route("GetElectrolyticTokens")]
         public async Task<IActionResult> GetElectrolyticTokens(int page, int pageSize)
         {
             var ElectrolyticTokens = await _eTokenService.GetElectrolyticTokens(page, pageSize);
             return Ok(ElectrolyticTokens);
-        }
+        }*/
 
         [HttpGet]
         [Route("GetElectrolyticTokens")]
         public async Task<IActionResult> GetElectrolyticTokens2([FromQuery] QueryParams queryParams)
         {
-            var ElectrolyticTokens = await _eTokenService.GetElectrolyticTokens2(queryParams);
+            var ElectrolyticTokens = await _eTokenService.GetElectrolyticTokens(queryParams);
             return Ok(ElectrolyticTokens);
         }
 

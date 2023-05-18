@@ -20,7 +20,7 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<IEnumerable<FCMTokenLog>> GetFCMTokenLogs(int page, int pageSize)
+       /* public async Task<IEnumerable<FCMTokenLog>> GetFCMTokenLogs(int page, int pageSize)
         {
             if (pageSize == 0)
             {
@@ -29,7 +29,7 @@ namespace BecaworkService.Services
             var tempFCMTokenLogs = _context.FCMTokenLogs.ToList().Skip((page - 1) * pageSize).Take(pageSize);
             return tempFCMTokenLogs;
 
-        }
+        }*/
         /* public async Task<IEnumerable<FCMTokenLog>> GetFCMTokenLogs2(QueryParams queryParams)
          {
              var tempFCMTokenLogs = new List<FCMTokenLog>();
@@ -135,7 +135,7 @@ namespace BecaworkService.Services
              return tempFCMTokenLogs;
          }*/
 
-        public async Task<QueryResult<FCMTokenLog>> GetFCMTokenLogs2(QueryParams queryParams)
+        public async Task<QueryResult<FCMTokenLog>> GetFCMTokenLogs(QueryParams queryParams)
         {
             var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
             var result = new QueryResult<FCMTokenLog>();
@@ -179,8 +179,8 @@ namespace BecaworkService.Services
 
         public async Task<FCMTokenLog> GetFCMTokenLogByID(long ID)
         {
-            var tempGetFCMTokenLog = await _context.FCMTokenLogs.FindAsync(ID);
-            return tempGetFCMTokenLog;
+            var tempFCMTokenLog = await _context.FCMTokenLogs.FindAsync(ID);
+            return tempFCMTokenLog;
         }
 
         /*    public async Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog)
@@ -189,8 +189,6 @@ namespace BecaworkService.Services
                 await _context.SaveChangesAsync();
                 return objFCMTokenLog;
             }*/
-
-
 
         public async Task<FCMTokenLog> UpdateFCMTokenLog(FCMTokenLog objFCMTokenLog)
         {

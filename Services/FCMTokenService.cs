@@ -22,11 +22,11 @@ namespace BecaworkService.Services
             _context = context;
         }
 
-        public async Task<FCMToken> AddFCMToken(FCMToken fcmToken)
+        public async Task<FCMToken> AddFCMToken(FCMToken objFCMToken)
         {
-            _context.FCMTokens.Add(fcmToken);
+            _context.FCMTokens.Add(objFCMToken);
             await _context.SaveChangesAsync();
-            return fcmToken;
+            return objFCMToken;
         }
 
         public bool DeteleFCMToken(long ID)
@@ -43,6 +43,7 @@ namespace BecaworkService.Services
             {
                 result = false;
             }
+
             return result;
         }
 
@@ -52,7 +53,7 @@ namespace BecaworkService.Services
             return tempFCMToken;
         }
 
-        public async Task<IEnumerable<FCMToken>> GetFCMTokens(int page, int pageSize)
+        /*public async Task<IEnumerable<FCMToken>> GetFCMTokens(int page, int pageSize)
         {
             var FCMTokens = new List<FCMToken>();
 
@@ -70,9 +71,9 @@ namespace BecaworkService.Services
             }
 
             return FCMTokens;
-        }
+        }*/
 
-        public async Task<QueryResult<FCMToken>> GetFCMTokens2(QueryParams queryParams)
+        public async Task<QueryResult<FCMToken>> GetFCMTokens(QueryParams queryParams)
         {
             var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
             var result = new QueryResult<FCMToken>();
@@ -114,11 +115,11 @@ namespace BecaworkService.Services
             return result;
         }
 
-        public async Task<FCMToken> UpdateFCMToken(FCMToken fcmToken)
+        public async Task<FCMToken> UpdateFCMToken(FCMToken objFCMToken)
         {
-            _context.Entry(fcmToken).State = EntityState.Modified;
+            _context.Entry(objFCMToken).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return fcmToken;
+            return objFCMToken;
         }
     }
 }

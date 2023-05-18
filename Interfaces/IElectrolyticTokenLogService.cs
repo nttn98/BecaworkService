@@ -8,11 +8,10 @@ namespace BecaworkService.Interfaces
 {
     public interface IElectrolyticTokenLogService
     {
-        Task<IEnumerable<ElectrolyticTokenLog>> GetElectrolyticTokenLogs(int page, int pageSize);
-        Task<QueryResult<ElectrolyticTokenLog>> GetElectrolyticTokenLogs2([FromQuery] QueryParams queryParams);
+        Task<QueryResult<ElectrolyticTokenLog>> GetElectrolyticTokenLogs([FromQuery] QueryParams queryParams);
         Task<ElectrolyticTokenLog> GetElectrolyticTokenLogByID(long ID);
-        Task<ElectrolyticTokenLog> AddElectrolyticTokenLog(ElectrolyticTokenLog objElectrolyticTokenLog);
-        Task<ElectrolyticTokenLog> UpdateElectrolyticTokenLog(ElectrolyticTokenLog objElectrolyticTokenLog);
+        Task<ElectrolyticTokenLog> AddElectrolyticTokenLog(ElectrolyticTokenLog objETokenLog);
+        Task<ElectrolyticTokenLog> UpdateElectrolyticTokenLog(ElectrolyticTokenLog objETokenLog);
         bool DeleteElectrolyticTokenLog(long ID);
     }
 }

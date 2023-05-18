@@ -20,28 +20,8 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<IEnumerable<ElectrolyticTokenLog>> GetElectrolyticTokenLogs(int page, int pageSize)
-        {
-            var ETokenLog = new List<ElectrolyticTokenLog>();
 
-            if (page == 0 && pageSize == 0 || pageSize == 0)
-            {
-                ETokenLog = await _context.ElectrolyticTokenLogs.ToListAsync();
-                return ETokenLog;
-            }
-            else if (page == 0)
-            {
-                ETokenLog = (List<ElectrolyticTokenLog>)_context.ElectrolyticTokenLogs.ToList().Take(pageSize);
-                return ETokenLog;
-            }
-            else
-            {
-                ETokenLog = (List<ElectrolyticTokenLog>)_context.FCMTokenLogs.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-                return ETokenLog;
-            }
-        }
-
-        public async Task<QueryResult<ElectrolyticTokenLog>> GetElectrolyticTokenLogs2(QueryParams queryParams)
+        public async Task<QueryResult<ElectrolyticTokenLog>> GetElectrolyticTokenLogs(QueryParams queryParams)
         {
             var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
             var result = new QueryResult<ElectrolyticTokenLog>();
@@ -61,7 +41,7 @@ namespace BecaworkService.Services
                     ["lastmodified"] = s => s.LastModified,
                     ["createdtime"] = s => s.CreatedTime
                 };
-                var tempElectrolyticTokenLog = await uniOfwork.ElectrolyticTokenLogRepository
+                var tempETokenLog = await uniOfwork.ElectrolyticTokenLogRepository
                     .FindAll(predicate: x =>
                     ((queryParams.FromDate == null || queryParams.ToDate == null)
                     || (x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
@@ -81,15 +61,15 @@ namespace BecaworkService.Services
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy]),
                     disableTracking: true,
                     pagingSpecification: pagingSpecification);
-                result = tempElectrolyticTokenLog;
+                result = tempETokenLog;
             }
             return result;
         }
 
         public async Task<ElectrolyticTokenLog> GetElectrolyticTokenLogByID(long ID)
         {
-            var ETokenLog = await _context.ElectrolyticTokenLogs.FindAsync(ID);
-            return ETokenLog;
+            var tempETokenLog = await _context.ElectrolyticTokenLogs.FindAsync(ID);
+            return tempETokenLog;
         }
 
         public async Task<ElectrolyticTokenLog> AddElectrolyticTokenLog(ElectrolyticTokenLog objETokenLog)

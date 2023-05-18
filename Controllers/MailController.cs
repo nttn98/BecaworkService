@@ -20,20 +20,20 @@ namespace BecaworkService.Controllers
         }
 
         //Get Mail
-        [HttpGet]
+        /*[HttpGet]
         [Route("GetMails")]
         public async Task<IActionResult> GetMails(int page, int pageSize)
         {
             var mails = await _mailService.GetMails(page, pageSize);
             return Ok(mails);
-        }
+        }*/
 
         //Get Mail v2
         [HttpGet]
-        [Route("GetMails2")]
-        public async Task<IActionResult> GetMails2([FromQuery] QueryParams queryParams)
+        [Route("GetMails")]
+        public async Task<IActionResult> GetMails([FromQuery] QueryParams queryParams)
         {
-            var mails = await _mailService.GetMails2(queryParams);
+            var mails = await _mailService.GetMails(queryParams);
             return Ok(mails);
         }
 
@@ -49,9 +49,9 @@ namespace BecaworkService.Controllers
         //Add Mail
         [HttpPost]
         [Route("AddMail")]
-        public async Task<IActionResult> AddMail(Mail mail)
+        public async Task<IActionResult> AddMail(Mail objMail)
         {
-            var tempMail = await _mailService.AddMail(mail);
+            var tempMail = await _mailService.AddMail(objMail);
             if (tempMail.ID == 0)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
@@ -62,9 +62,9 @@ namespace BecaworkService.Controllers
         //Update Mail
         [HttpPut]
         [Route("UpdateMail")]
-        public async Task<IActionResult> UpdateMail(Mail mail)
+        public async Task<IActionResult> UpdateMail(Mail objMail)
         {
-            await _mailService.UpdateMail(mail);
+            await _mailService.UpdateMail(objMail);
             return Ok("Update Mail Successfully");
         }
 

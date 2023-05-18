@@ -20,7 +20,7 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<IEnumerable<Mail>> GetMails(int page, int pageSize)
+        /*public async Task<IEnumerable<Mail>> GetMails(int page, int pageSize)
         {
             if (page == 0 && pageSize == 0 || pageSize == 0)
             {
@@ -33,7 +33,7 @@ namespace BecaworkService.Services
                 return mails;
             }
 
-        }
+        }*/
         /* public async Task<IEnumerable<Mail>> GetMails1(QueryParams queryParams)
          {
              var mails = new List<Mail>();
@@ -178,7 +178,7 @@ namespace BecaworkService.Services
              return mails;
          }*/
 
-        public async Task<QueryResult<Mail>> GetMails2(QueryParams queryParams)
+        public async Task<QueryResult<Mail>> GetMails(QueryParams queryParams)
         {
             var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
             var result = new QueryResult<Mail>();

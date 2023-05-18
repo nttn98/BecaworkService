@@ -16,19 +16,19 @@ namespace BecaworkService.Controllers
             _eTokenLogService = eTokenLogService ?? throw new ArgumentNullException(nameof(eTokenLogService));
         }
 
-        [HttpGet]
+       /* [HttpGet]
         [Route("GetElectrolyticTokens")]
         public async Task<IActionResult> GetElectrolyticLogTokens(int page, int pageSize)
         {
             var eTokenLogs = await _eTokenLogService.GetElectrolyticTokenLogs(page, pageSize);
             return Ok(eTokenLogs);
-        }
+        }*/
 
         [HttpGet]
-        [Route("GetElectrolyticLogTokens")]
-        public async Task<IActionResult> GetElectrolyticTokenLogs2([FromQuery] QueryParams queryParams)
+        [Route("GetElectrolyticTokenLogs")]
+        public async Task<IActionResult> GetElectrolyticTokenLogs([FromQuery] QueryParams queryParams)
         {
-            var eTokenLogs = await _eTokenLogService.GetElectrolyticTokenLogs2(queryParams);
+            var eTokenLogs = await _eTokenLogService.GetElectrolyticTokenLogs(queryParams);
             return Ok(eTokenLogs);
         }
 
@@ -49,15 +49,15 @@ namespace BecaworkService.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
             }
-            return Ok("Added ElectrolyticToken Successfully");
+            return Ok("Added ElectrolyticTokenLog Successfully");
         }
 
         [HttpPut]
-        [Route("UpdateElectrolyticToken")]
+        [Route("UpdateElectrolyticTokenLog")]
         public async Task<IActionResult> Put(ElectrolyticTokenLog objETokenLog)
         {
             await _eTokenLogService.AddElectrolyticTokenLog(objETokenLog);
-            return Ok("Update ElectrolyticToken Successfully");
+            return Ok("Update ElectrolyticTokenLog Successfully");
         }
 
         [HttpDelete]
@@ -65,7 +65,7 @@ namespace BecaworkService.Controllers
         public JsonResult Delete(long ID)
         {
             _eTokenLogService.DeleteElectrolyticTokenLog(ID);
-            return new JsonResult("Delete ElectrolyticToken Successfully");
+            return new JsonResult("Delete ElectrolyticTokenLog Successfully");
         }
     }
 }

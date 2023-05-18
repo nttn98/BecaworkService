@@ -16,20 +16,20 @@ namespace BecaworkService.Controllers
             _fCMTokenService = fCMTokenService ?? throw new ArgumentNullException(nameof(fCMTokenService));
         }
 
-        [HttpGet]
+      /*  [HttpGet]
         [Route("GetFCMTokens")]
         public async Task<IActionResult> GetFCMTokens(int page, int pageSize)
         {
             var FCMTokens = await _fCMTokenService.GetFCMTokens(page, pageSize);
             return Ok(FCMTokens);
-        }
+        }*/
 
         [HttpGet]
-        [Route("GetElectrolyticTokens")]
+        [Route("GetFCMTokens")]
         public async Task<IActionResult> GetFCMTokens2([FromQuery] QueryParams queryParams)
         {
-            var fCMTokens = await _fCMTokenService.GetFCMTokens2(queryParams);
-            return Ok(fCMTokens);
+            var tempFCMTokens = await _fCMTokenService.GetFCMTokens(queryParams);
+            return Ok(tempFCMTokens);
         }
 
         [HttpGet]
@@ -42,9 +42,9 @@ namespace BecaworkService.Controllers
 
         [HttpPost]
         [Route("AddFCMToken")]
-        public async Task<IActionResult> Post(FCMToken fCMToken)
+        public async Task<IActionResult> Post(FCMToken objFCMToken)
         {
-            var tempFCMToken = await _fCMTokenService.AddFCMToken(fCMToken);
+            var tempFCMToken = await _fCMTokenService.AddFCMToken(objFCMToken);
             if (tempFCMToken.Id == 0)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
@@ -54,9 +54,9 @@ namespace BecaworkService.Controllers
 
         [HttpPut]
         [Route("UpdateFCMToken")]
-        public async Task<IActionResult> Put(FCMToken fCMToken)
+        public async Task<IActionResult> Put(FCMToken objFCMToken)
         {
-            await _fCMTokenService.AddFCMToken(fCMToken);
+            await _fCMTokenService.AddFCMToken(objFCMToken);
             return Ok("Update FCMToken Successfully");
         }
 

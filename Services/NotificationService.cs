@@ -20,7 +20,7 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<NotificationResponse> GetNotifications(int page, int pageSize)
+        /*public async Task<NotificationResponse> GetNotifications(int page, int pageSize)
         {
             var total = await _context.Notifications.CountAsync();
             if (page == 0 && pageSize == 0)
@@ -41,7 +41,7 @@ namespace BecaworkService.Services
                     Data = notifications
                 };
             }
-        }
+        }*/
 
         /*public async Task<NotificationResponse> GetNotifications1(QueryParams queryParams)
         {
@@ -162,7 +162,7 @@ namespace BecaworkService.Services
             };
         }*/
 
-        public async Task<QueryResult<Notification>> GetNotifications2(QueryParams queryParams)
+        public async Task<QueryResult<Notification>> GetNotifications(QueryParams queryParams)
         {
             var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
             var result = new QueryResult<Notification>();
@@ -186,7 +186,7 @@ namespace BecaworkService.Services
                     ["isseen"] = s => s.IsSeen,
                 };
 
-                var tempNotification = await unitOfWork.NotificationRepository
+                var tempNotifi = await unitOfWork.NotificationRepository
                     .FindAll(predicate: x => ((queryParams.FromDate == null || queryParams.ToDate == null)
                         || x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
                         || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)
@@ -211,7 +211,7 @@ namespace BecaworkService.Services
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
                     disableTracking: true,
                     pagingSpecification: pagingSpecification); ;
-                result = tempNotification;
+                result = tempNotifi;
             }
 
             return result;
