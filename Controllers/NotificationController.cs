@@ -17,13 +17,13 @@ namespace BecaworkService.Controllers
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
-        [HttpGet]
+/*        [HttpGet]
         [Route("GetNotifications")]
         public async Task<IActionResult> GetNotifications(int page, int pageSize)
         {
             var tempNotifi = await _notificationService.GetNotifications(page, pageSize);
             return Ok(tempNotifi);
-        }
+        }*/
 
      /*   [HttpGet]
         [Route("GetNotifications1")]
@@ -34,10 +34,10 @@ namespace BecaworkService.Controllers
         }*/
 
         [HttpGet]
-        [Route("GetNotifications2")]
+        [Route("GetNotifications")]
         public async Task<IActionResult> GetNotifications2([FromQuery] QueryParams queryParams)
         {
-            var tempNotifi = await _notificationService.GetNotifications2(queryParams);
+            var tempNotifi = await _notificationService.GetNotifications(queryParams);
             return Ok(tempNotifi);
         }
 
