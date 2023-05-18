@@ -13,7 +13,10 @@ export const MailUpdatePage = () => {
   const [data, setData] = useState<MailModel | undefined>();
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    console.log(values);
+    axios.put("/api/mail/UpdateMail", values).then((res) => {
+      console.log(res.data);
+    });
   };
 
   let navigate = useNavigate();
