@@ -8,55 +8,18 @@ import { useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 
-const columns: ColumnsType<MailModel> = [
-  {
-    title: "Id",
-    dataIndex: "id",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-  },
-  {
-    title: "Subject",
-    dataIndex: "subject",
-  },
-  {
-    title: "Created by",
-    dataIndex: "createBy",
-  },
-  {
-    title: "Create time",
-    dataIndex: "createTime",
-  },
-  {
-    title: "Is sent",
-    dataIndex: "isSend",
-  },
-  {
-    title: "Send time",
-    dataIndex: "sendTime",
-  },
-  {
-    title: "Send status",
-    dataIndex: "sendStatus",
-  },
-];
-
 export const MailDetailPage = () => {
   const { id } = useParams();
   const [data, setData] = useState<MailModel | undefined>();
   let navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("https://localhost:5001/api/Mail/GetMailByID/" + id)
-      .then((res) => {
-        console.log(res.data);
-        if (res) {
-          setData(res.data);
-        }
-      });
+    axios.get("/api/Mail/GetMailByID/" + id).then((res) => {
+      console.log(res.data);
+      if (res) {
+        setData(res.data);
+      }
+    });
   }, []);
 
   return (
@@ -112,7 +75,7 @@ export const MailDetailPage = () => {
           </Row>
           <Row>
             <Col span={4} className="title-details">
-              Is Read
+              Is Send
             </Col>
             <Col span={4}>{data.isSend ? "Yes" : "No"}</Col>
           </Row>

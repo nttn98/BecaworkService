@@ -39,6 +39,7 @@ const columns: ColumnsType<MailModel> = [
     render: (_, record) => (
       <Space size="middle">
         <Link to={"/mail/" + record.id}>Detail</Link>
+        <Link to={"/mail/update/" + record.id}>Update</Link>
       </Space>
     ),
   },
