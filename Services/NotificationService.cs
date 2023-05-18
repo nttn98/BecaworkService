@@ -20,28 +20,6 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<NotificationResponse> GetNotifications(int page, int pageSize)
-        {
-            var total = await _context.Notifications.CountAsync();
-            if (page == 0 && pageSize == 0)
-            {
-                var notifications = await _context.Notifications.ToListAsync();
-                return new NotificationResponse
-                {
-                    Total = total,
-                    Data = notifications
-                };
-            }
-            else
-            {
-                var notifications = await _context.Notifications.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-                return new NotificationResponse
-                {
-                    Total = total,
-                    Data = notifications
-                };
-            }
-        }
 
         /*public async Task<NotificationResponse> GetNotifications1(QueryParams queryParams)
         {
@@ -162,7 +140,7 @@ namespace BecaworkService.Services
             };
         }*/
 
-        public async Task<QueryResult<Notification>> GetNotifications2(QueryParams queryParams)
+        public async Task<QueryResult<Notification>> GetNotifications(QueryParams queryParams)
         {
             var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
             var result = new QueryResult<Notification>();

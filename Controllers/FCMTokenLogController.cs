@@ -18,21 +18,13 @@ namespace BecaworkService.Controllers
             _FCMTokenLogService = FCMTokenService ?? throw new ArgumentNullException(nameof(FCMTokenService));
         }
 
+
         //Get 
         [HttpGet]
         [Route("GetFCMTokenLogs")]
-        public async Task<IActionResult> GetFCMTokenLogs(int page, int pageSize)
+        public async Task<IActionResult> GetFCMTokenLogs([FromQuery] QueryParams queryParams)
         {
-            var FCMTokenLogs = await _FCMTokenLogService.GetFCMTokenLogs(page, pageSize);
-            return Ok(FCMTokenLogs);
-        }
-
-        //Get v2
-        [HttpGet]
-        [Route("GetFCMTokenLogs2")]
-        public async Task<IActionResult> GetFCMTokenLogs2([FromQuery] QueryParams queryParams)
-        {
-            var FCMTokenLogs = await _FCMTokenLogService.GetFCMTokenLogs2(queryParams);
+            var FCMTokenLogs = await _FCMTokenLogService.GetFCMTokenLogs(queryParams);
             return Ok(FCMTokenLogs);
         }
 

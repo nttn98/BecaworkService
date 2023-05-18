@@ -22,18 +22,9 @@ namespace BecaworkService.Controllers
         //Get Mail
         [HttpGet]
         [Route("GetMails")]
-        public async Task<IActionResult> GetMails(int page, int pageSize)
+        public async Task<IActionResult> GetMails([FromQuery] QueryParams queryParams)
         {
-            var mails = await _mailService.GetMails(page, pageSize);
-            return Ok(mails);
-        }
-
-        //Get Mail v2
-        [HttpGet]
-        [Route("GetMails2")]
-        public async Task<IActionResult> GetMails2([FromQuery] QueryParams queryParams)
-        {
-            var mails = await _mailService.GetMails2(queryParams);
+            var mails = await _mailService.GetMails(queryParams);
             return Ok(mails);
         }
 
