@@ -17,14 +17,6 @@ namespace BecaworkService.Controllers
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
-/*        [HttpGet]
-        [Route("GetNotifications")]
-        public async Task<IActionResult> GetNotifications(int page, int pageSize)
-        {
-            var tempNotifi = await _notificationService.GetNotifications(page, pageSize);
-            return Ok(tempNotifi);
-        }*/
-
      /*   [HttpGet]
         [Route("GetNotifications1")]
         public async Task<IActionResult> GetNotifications1([FromQuery] QueryParams queryParams)
@@ -35,7 +27,7 @@ namespace BecaworkService.Controllers
 
         [HttpGet]
         [Route("GetNotifications")]
-        public async Task<IActionResult> GetNotifications2([FromQuery] QueryParams queryParams)
+        public async Task<IActionResult> GetNotifications([FromQuery] QueryParams queryParams)
         {
             var tempNotifi = await _notificationService.GetNotifications(queryParams);
             return Ok(tempNotifi);
@@ -77,5 +69,6 @@ namespace BecaworkService.Controllers
             return new JsonResult("Delete Notification Successfully");
 
         }
+
     }
 }

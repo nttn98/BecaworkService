@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Services
@@ -20,16 +22,6 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-       /* public async Task<IEnumerable<FCMTokenLog>> GetFCMTokenLogs(int page, int pageSize)
-        {
-            if (pageSize == 0)
-            {
-                pageSize = 50;
-            }
-            var tempFCMTokenLogs = _context.FCMTokenLogs.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-            return tempFCMTokenLogs;
-
-        }*/
         /* public async Task<IEnumerable<FCMTokenLog>> GetFCMTokenLogs2(QueryParams queryParams)
          {
              var tempFCMTokenLogs = new List<FCMTokenLog>();
@@ -150,8 +142,6 @@ namespace BecaworkService.Services
                 {
                     ["id"] = s => s.Id,
                     ["statuscode"] = s => s.StatusCode,
-                    ["request"] = s => s.Request,
-                    ["response"] = s => s.Response,
                     ["lastmodified"] = s => s.LastModified,
                     ["createdtime"] = s => s.CreatedTime
                 };
@@ -160,13 +150,14 @@ namespace BecaworkService.Services
                     ((queryParams.FromDate == null || queryParams.ToDate == null)
                     || (x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
                     || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate))
+
                     && ((string.IsNullOrEmpty(queryParams.Content)
                     || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.StatusCode.ToString(), $"%{queryParams.Content}%")))),
                     include: null,
 
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
-                                                                                ? source.OrderBy(d => d.CreatedTime)
+                                                                                ? source.OrderByDescending(d => d.CreatedTime)
                                                                                 : queryParams.IsSortAscending
                                                                                 ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
@@ -179,16 +170,16 @@ namespace BecaworkService.Services
 
         public async Task<FCMTokenLog> GetFCMTokenLogByID(long ID)
         {
-            var tempFCMTokenLog = await _context.FCMTokenLogs.FindAsync(ID);
-            return tempFCMTokenLog;
+            var tempGetFCMTokenLog = await _context.FCMTokenLogs.FindAsync(ID);
+            return tempGetFCMTokenLog;
         }
 
-        /*    public async Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog)
-            {
-                _context.FCMTokenLogs.Add(objFCMTokenLog);
-                await _context.SaveChangesAsync();
-                return objFCMTokenLog;
-            }*/
+        public async Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog)
+        {
+            _context.FCMTokenLogs.Add(objFCMTokenLog);
+            await _context.SaveChangesAsync();
+            return objFCMTokenLog;
+        }
 
         public async Task<FCMTokenLog> UpdateFCMTokenLog(FCMTokenLog objFCMTokenLog)
         {
@@ -213,5 +204,6 @@ namespace BecaworkService.Services
             }
             return result;
         }
+
     }
 }

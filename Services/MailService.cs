@@ -20,20 +20,6 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        /*public async Task<IEnumerable<Mail>> GetMails(int page, int pageSize)
-        {
-            if (page == 0 && pageSize == 0 || pageSize == 0)
-            {
-                var mails = await _context.Mails.ToListAsync();
-                return mails;
-            }
-            else
-            {
-                var mails = _context.Mails.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-                return mails;
-            }
-
-        }*/
         /* public async Task<IEnumerable<Mail>> GetMails1(QueryParams queryParams)
          {
              var mails = new List<Mail>();
@@ -207,7 +193,7 @@ namespace BecaworkService.Services
                     ["organizermail"] = s => s.OrganizerMail,*/
                     ["uid"] = s => s.UID
                 };
-                
+
                 var tempMail = await uniOfWork.MailRepository
                     .FindAll(predicate: x => ((queryParams.FromDate == null || queryParams.ToDate == null)
                     || x.CreateTime >= queryParams.FromDate && x.CreateTime <= queryParams.ToDate
@@ -227,9 +213,11 @@ namespace BecaworkService.Services
                     || EF.Functions.Like(x.MailType.ToString(), $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.Organizer, $"%{queryParams.Content}%")
                     || EF.Functions.Like(x.UID, $"%{queryParams.Content}%")))),
+
                     include: null,
-                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower())) 
-                                                                                ? source.OrderBy(d => d.CreateTime)
+
+                    orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
+                                                                                ? source.OrderByDescending(d => d.CreateTime)
                                                                                 : queryParams.IsSortAscending
                                                                                 ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),

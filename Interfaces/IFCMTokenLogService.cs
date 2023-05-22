@@ -10,8 +10,10 @@ namespace BecaworkService.Interfaces
     {
         Task<QueryResult<FCMTokenLog>> GetFCMTokenLogs(QueryParams queryParams);
         Task<FCMTokenLog> GetFCMTokenLogByID(long ID);
-        /* Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog);*/
+
+        Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog);
         Task<FCMTokenLog> UpdateFCMTokenLog(FCMTokenLog objFCMTokenLog);
         bool DeleteFCMTokenLog(long ID);
+
     }
 }

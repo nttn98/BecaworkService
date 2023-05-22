@@ -20,28 +20,6 @@ namespace BecaworkService.Services
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        /*public async Task<NotificationResponse> GetNotifications(int page, int pageSize)
-        {
-            var total = await _context.Notifications.CountAsync();
-            if (page == 0 && pageSize == 0)
-            {
-                var notifications = await _context.Notifications.ToListAsync();
-                return new NotificationResponse
-                {
-                    Total = total,
-                    Data = notifications
-                };
-            }
-            else
-            {
-                var notifications = await _context.Notifications.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-                return new NotificationResponse
-                {
-                    Total = total,
-                    Data = notifications
-                };
-            }
-        }*/
 
         /*public async Task<NotificationResponse> GetNotifications1(QueryParams queryParams)
         {
@@ -186,7 +164,7 @@ namespace BecaworkService.Services
                     ["isseen"] = s => s.IsSeen,
                 };
 
-                var tempNotifi = await unitOfWork.NotificationRepository
+                var tempNotification = await unitOfWork.NotificationRepository
                     .FindAll(predicate: x => ((queryParams.FromDate == null || queryParams.ToDate == null)
                         || x.CreatedTime >= queryParams.FromDate && x.CreatedTime <= queryParams.ToDate
                         || x.LastModified >= queryParams.FromDate && x.LastModified <= queryParams.ToDate)
@@ -205,13 +183,13 @@ namespace BecaworkService.Services
 
                     include: null,
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
-                                                                                ? source.OrderBy(d => d.CreatedTime)
+                                                                                ? source.OrderByDescending(d => d.CreatedTime)
                                                                                 : queryParams.IsSortAscending
                                                                                 ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
                     disableTracking: true,
                     pagingSpecification: pagingSpecification); ;
-                result = tempNotifi;
+                result = tempNotification;
             }
 
             return result;
