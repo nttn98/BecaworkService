@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Services
@@ -172,14 +174,12 @@ namespace BecaworkService.Services
             return tempGetFCMTokenLog;
         }
 
-        /*    public async Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog)
-            {
-                _context.FCMTokenLogs.Add(objFCMTokenLog);
-                await _context.SaveChangesAsync();
-                return objFCMTokenLog;
-            }*/
-
-
+        public async Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog)
+        {
+            _context.FCMTokenLogs.Add(objFCMTokenLog);
+            await _context.SaveChangesAsync();
+            return objFCMTokenLog;
+        }
 
         public async Task<FCMTokenLog> UpdateFCMTokenLog(FCMTokenLog objFCMTokenLog)
         {
@@ -204,5 +204,6 @@ namespace BecaworkService.Services
             }
             return result;
         }
+
     }
 }

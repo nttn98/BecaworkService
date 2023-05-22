@@ -3,6 +3,8 @@ using BecaworkService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Controllers
@@ -12,10 +14,12 @@ namespace BecaworkService.Controllers
     public class FCMTokenLogController : ControllerBase
     {
         public readonly IFCMTokenLogService _FCMTokenLogService;
+       /* private readonly HttpClient _httpClient;*/
 
         public FCMTokenLogController(IFCMTokenLogService FCMTokenService)
         {
             _FCMTokenLogService = FCMTokenService ?? throw new ArgumentNullException(nameof(FCMTokenService));
+            /*_httpClient = httpClient ?? throw new ArgumentNullException();*/
         }
 
 
@@ -36,19 +40,27 @@ namespace BecaworkService.Controllers
             var tempFCMTokenLog = await _FCMTokenLogService.GetFCMTokenLogByID(ID);
             return Ok(tempFCMTokenLog);
         }
-        /*  //Add FCMTokenLog
-          [HttpPost]
-          [Route("AddFCMTokenLog")]
-          public async Task<IActionResult> Post(FCMTokenLog objFCMTokenLog)
-          {
-              var tempFCMTokenLog = await _FCMTokenLogService.AddFCMTokenLog(objFCMTokenLog);
-              if (tempFCMTokenLog.Id == 0)
-              {
-                  return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
+        //Add FCMTokenLog
+        [HttpPost]
+        [Route("AddFCMTokenLog")]
+        public async Task<IActionResult> Post(FCMTokenLog objFCMTokenLog)
+        {
+            var tempFCMTokenLog = await _FCMTokenLogService.AddFCMTokenLog(objFCMTokenLog);
+            /*if (tempFCMTokenLog.Id == 0)
+            {
+                var content = new FormUrlEncodedContent(new[]
+                {
+                new KeyValuePair<string,string>("ID", objFCMTokenLog.Id.ToString())
+                });
 
-              }
-              return Ok("Added FCMTokenLog Successfully");
-          }*/
+                var response = await _httpClient.PostAsync("https://service.vntts.vn/FcmToken/SendNotification", content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return Ok(content);
+                }
+            }*/
+            return Ok("Added FCMTokenLog Successfully");
+        }
 
         //Update FCMTokenLog
         [HttpPut]

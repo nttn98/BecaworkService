@@ -69,5 +69,6 @@ namespace BecaworkService.Controllers
             return new JsonResult("Delete Notification Successfully");
 
         }
+
     }
 }
