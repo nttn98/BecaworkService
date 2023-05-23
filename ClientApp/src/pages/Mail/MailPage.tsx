@@ -4,22 +4,26 @@ import {
   Input,
   Pagination,
   PaginationProps,
+  Select,
   Space,
   Table,
   Tag,
   message,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Label } from "reactstrap";
 import { Link } from "react-router-dom";
 import { MailModel } from "../../models/MailModel";
+import { parse } from "path";
+import { type } from "os";
 
 const columns: ColumnsType<MailModel> = [
   {
     title: "Id",
     dataIndex: "id",
+    sorter: (record1, record2) => record1.id - record2.id,
   },
   {
     title: "Email",
@@ -28,6 +32,11 @@ const columns: ColumnsType<MailModel> = [
   {
     title: "Subject",
     dataIndex: "subject",
+  },
+  {
+    title: "IsSend",
+    dataIndex: "isSend",
+    render: (text: boolean) => (text ? "Yes" : "No"),
   },
   {
     title: "Created by",
@@ -45,14 +54,14 @@ const columns: ColumnsType<MailModel> = [
   },
 ];
 
-//const pageSize = 10;
-
 export default function MailPage() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [totalItems, settotalItems] = useState();
   const [pageSize, setPageSize] = useState(10);
+  const [searchText, setSearchText] = useState("");
+  const [isSend, setisSend] = useState("");
 
   const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
     current,
@@ -62,57 +71,76 @@ export default function MailPage() {
     setPageSize(pageSize);
   };
 
-  const fetchData = async () => {
+  const handleInputChange = async (e: string) => {
     setLoading(true);
+    setSearchText(e);
+    console.log(isSend);
     try {
       const result = await axios.get(
-        `/api/Mail/GetMails2?page=${page}&pageSize=${pageSize}`
+        `/api/Mail/GetMails2?page=${page}&pageSize=${pageSize}&Content=${searchText}&isSend=${isSend}`
       );
+      setData(result.data.items);
+      settotalItems(result.data.totalItems);
       console.log(result);
-      if (result.status === 200) {
-        setData(result.data.items);
-        settotalItems(result.data.totalItems);
-      }
     } catch {
       message.error("Loi");
     }
     setLoading(false);
+    ``;
   };
+
+  const param = async (value: string) => {};
+
+  const onChange = async (value: string) => {
+    setisSend(value);
+  };
+
+  const onSearch = (value: string) => {
+    console.log("search:", value);
+  };
+
   useEffect(() => {
-    fetchData();
-  }, [page, pageSize]);
+    handleInputChange(searchText);
+  }, [isSend, searchText, page, pageSize]);
 
   return (
     <div>
       <Input.Search
         allowClear
         size="large"
-        style={{ width: 500 }}
+        style={{ width: 500, margin: 10 }}
         placeholder="Search..."
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+        type="text"
       />
 
-      {/* <Form
-        name="basic"
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 14 }}
-        style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
-        autoComplete="off"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item label="Page" name="page">
-          <Input />
-        </Form.Item>
-        <Form.Item label="Page size" name="pageSize">
-          <Input />
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form> */}
+      <Select
+        showSearch
+        style={{ width: 100, margin: 10 }}
+        placeholder="Select a person"
+        optionFilterProp="children"
+        onChange={onChange}
+        onSearch={onSearch}
+        filterOption={(input, option) =>
+          (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+        }
+        options={[
+          {
+            value: "",
+            label: "All ",
+          },
+          {
+            value: true,
+            label: "Yes",
+          },
+          {
+            value: false,
+            label: "No",
+          },
+        ]}
+      />
+
       <Table
         columns={columns}
         dataSource={data}
@@ -120,10 +148,11 @@ export default function MailPage() {
         pagination={false}
         loading={loading}
       />
+
       <div className="pagination">
         <Pagination
           current={page}
-          total={totalItems}
+          total={totalItems || 0}
           pageSize={pageSize}
           onShowSizeChange={onShowSizeChange}
           onChange={(page) => setPage(page)}
