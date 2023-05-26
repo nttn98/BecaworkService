@@ -21,6 +21,9 @@ import { MailModel } from "../../models/MailModel";
 import { parse } from "path";
 import { type } from "os";
 import dayjs from "dayjs";
+import moment from "moment";
+import { debug } from "console";
+import { RangePickerProps } from "antd/es/date-picker";
 
 const { RangePicker } = DatePicker;
 
@@ -31,20 +34,20 @@ export default function MailPage() {
   const [totalItems, settotalItems] = useState();
   const [pageSize, setPageSize] = useState(10);
   const [searchText, setSearchText] = useState<string | undefined>();
-  const [sortBy, setSortBy] = useState<string | undefined>();
-  const [isSend, setisSend] = useState<string | undefined>();
-  const [sortOrder, setSortOrder] = useState<boolean | undefined>(undefined);
 
-  const [rangeDate, setRangeDate] = useState([] || "");
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
+  const [sortBy, setSortBy] = useState<any>();
+  const [sortOrder, setSortOrder] = useState<boolean | "">();
+
+  const [isSend, setisSend] = useState<string | undefined>();
+
+  const [fromDate, setFromDate] = useState<any>();
+  const [toDate, setToDate] = useState<any>();
+
+  const DATE_FORMAT = "YYYY-MM-DDTHH:mm:ss.sss";
 
   const handTitleClick = (column: string) => {
-    if (sortBy === column) {
-      setSortOrder(!sortOrder);
-      console.log(sortBy);
-      console.log(sortOrder);
-      handleInputChange();
+    if (sortBy === column && sortOrder == true) {
+      setSortOrder(false);
     } else {
       setSortBy(column);
       setSortOrder(true);
@@ -77,10 +80,14 @@ export default function MailPage() {
     {
       title: "Create time",
       dataIndex: "createTime",
+      render: (text: string) =>
+        text ? dayjs(text).format("YYYY-MM-DD") : null,
     },
     {
       title: "Send time",
       dataIndex: "sendTime",
+      render: (text: string) =>
+        text ? dayjs(text).format("YYYY-MM-DD") : null,
     },
     {
       title: "Create by",
@@ -96,10 +103,26 @@ export default function MailPage() {
         <Space size="middle">
           <Link to={"/mail/" + record.id}>Detail</Link>
           <Link to={"/mail/update/" + record.id}>Update</Link>
+          {record.isSend === false && (
+            <Button onClick={() => handleResend(record.id)}>Resend</Button>
+          )}
         </Space>
       ),
     },
   ];
+
+  const handleResend = async (mailID: number) => {
+    setLoading(true);
+    try {
+      console.log(mailID);
+      await axios.post(`/api/Mail/SendMailBySMTP/${mailID}`);
+      message.success("Resend Mail Successfully");
+      fetchData();
+    } catch {
+      message.error("Resend loi");
+    }
+    setLoading(false);
+  };
 
   const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
     current,
@@ -108,13 +131,13 @@ export default function MailPage() {
     console.log(current, pageSize);
     setPageSize(pageSize);
   };
-  const handleInputChange = async () => {
+
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const result = await axios.get(`/api/Mail/GetMails2`, { params });
+      const result = await axios.get(`/api/Mail/GetMails`, { params });
       setData(result.data.items);
       settotalItems(result.data.totalItems);
-      console.log(result);
     } catch {
       message.error("Loi");
     }
@@ -122,34 +145,29 @@ export default function MailPage() {
     ``;
   };
 
-  const onChangeSearch = async (value: string) => {
+  const onChangeIsSend = async (value: string) => {
     setisSend(value);
   };
 
-  const handleDateChange = (dates: any) => {
-    if (dates && dates.length === 2) {
-      const [start, end] = dates;
-      setFromDate(dayjs(start).format("YYYY-MM-DDTHH:mm:ss.sss"));
-      setToDate(dayjs(end).format("YYYY-MM-DDTHH:mm:ss.sss"));
-    } else {
-      setFromDate("");
-      setToDate("");
-    }
+  const handleDateChange = async (dates: any) => {
+    setFromDate(dates[0]);
+    setToDate(dates[1]);
   };
+
   function onReset() {
     setSortBy(undefined);
     setSortOrder(undefined);
     setSearchText(undefined);
     setisSend(undefined);
-    handleDateChange([]);
-    handleInputChange();
+    setFromDate(undefined);
+    setToDate(undefined);
   }
 
   const params = {
     page,
     pageSize,
     Content: searchText,
-    sortBy: sortBy,
+    sortBy,
     isSortAscending: sortOrder,
     isSend,
     fromDate,
@@ -157,8 +175,8 @@ export default function MailPage() {
   };
 
   useEffect(() => {
-    handleInputChange();
-  }, [fromDate, toDate, sortBy, isSend, searchText, page, pageSize]);
+    fetchData();
+  }, [fromDate, toDate, sortOrder, sortBy, isSend, searchText, page, pageSize]);
 
   return (
     <div>
@@ -172,14 +190,12 @@ export default function MailPage() {
         type="text"
       />
 
-      <button onClick={onReset}> reset</button>
-
       <Select
-        showSearch
         style={{ width: 100, margin: 10 }}
         placeholder="Select a person"
         optionFilterProp="children"
-        onChange={onChangeSearch}
+        onChange={onChangeIsSend}
+        value={isSend}
         filterOption={(input, option) =>
           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
         }
@@ -199,7 +215,13 @@ export default function MailPage() {
         ]}
       />
 
-      <RangePicker onChange={handleDateChange} />
+      <RangePicker
+        format={"YYYY-MM-DD"}
+        onChange={handleDateChange}
+        value={[fromDate, toDate]}
+      />
+
+      <button onClick={onReset}> reset</button>
 
       <Table
         columns={columns}
