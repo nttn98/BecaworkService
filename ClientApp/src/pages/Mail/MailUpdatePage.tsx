@@ -18,7 +18,7 @@ export const MailUpdatePage = () => {
     console.log(values);
     axios.put("/api/mail/UpdateMail", values).then((res) => {
       console.log(res.data);
-      message.success(
+      messsage.success(
         <Alert message="Update Mail Successfully" type="success" />
       );
     });
