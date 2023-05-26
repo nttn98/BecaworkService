@@ -7,7 +7,11 @@ using System;
 
 namespace BecaworkService.Controllers
 {
-    public class FCMTokenController : ControllerBase
+
+    [Route("api/[controller]")]
+    [ApiController]
+
+    public class FCMTokenController : Controller
     {
         public readonly IFCMTokenService _fCMTokenService;
 

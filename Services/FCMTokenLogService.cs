@@ -4,6 +4,7 @@ using BecaworkService.Models;
 using BecaworkService.Models.Responses;
 using BecaworkService.Respository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,11 @@ namespace BecaworkService.Services
     public class FCMTokenLogService : IFCMTokenLogService
     {
         private readonly BecaworkDbContext _context;
-
-        public FCMTokenLogService(BecaworkDbContext context)
+        private readonly IConfiguration _configuration;
+        public FCMTokenLogService(BecaworkDbContext context, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
         /* public async Task<IEnumerable<FCMTokenLog>> GetFCMTokenLogs2(QueryParams queryParams)
          {
@@ -129,7 +131,7 @@ namespace BecaworkService.Services
 
         public async Task<QueryResult<FCMTokenLog>> GetFCMTokenLogs(QueryParams queryParams)
         {
-            var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var result = new QueryResult<FCMTokenLog>();
             if (queryParams.Page == 0)
             {

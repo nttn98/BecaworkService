@@ -3,11 +3,14 @@ using BecaworkService.Interfaces;
 using BecaworkService.Models;
 using BecaworkService.Models.Responses;
 using BecaworkService.Respository;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Services
@@ -15,10 +18,12 @@ namespace BecaworkService.Services
     public class MailService : IMailService
     {
         private readonly BecaworkDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public MailService(BecaworkDbContext context)
+        public MailService(BecaworkDbContext context, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
         /* public async Task<IEnumerable<Mail>> GetMails1(QueryParams queryParams)
          {
@@ -166,7 +171,7 @@ namespace BecaworkService.Services
 
         public async Task<QueryResult<Mail>> GetMails(QueryParams queryParams)
         {
-            var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var result = new QueryResult<Mail>();
             if (queryParams.Page == 0)
             {
@@ -239,7 +244,6 @@ namespace BecaworkService.Services
             await _context.SaveChangesAsync();
             return objMail;
         }
-
         public async Task<Mail> UpdateMail(Mail objMail)
         {
             _context.Entry(objMail).State = EntityState.Modified;
@@ -262,5 +266,68 @@ namespace BecaworkService.Services
             }
             return result;
         }
+
+
+        public async Task<bool> SendMailBySMTP(long ID)
+        {
+
+           /* string _smtpUsername = "reroll.t.o.fantasy1@gmail.com";
+            string _smtpPassword = "coigifjgmhtvgmce";*/
+            
+            string _smtpUsername = _configuration.GetValue<string>("Account:username");
+            string _smtpPassword = _configuration.GetValue<string>("Account:password");
+
+
+            var tempMail = await _context.Mails.FindAsync(ID);
+
+            if (tempMail.IsSend == false)
+            {
+                /*if (String.IsNullOrEmpty(tempMail.EmailCC) && String.IsNullOrEmpty(tempMail.Subject) && String.IsNullOrEmpty(tempMail.EmailContent))
+                {
+                    return false;
+                }*/
+
+                try
+                {
+                    MailMessage msg = new MailMessage("reroll.t.o.fantasy1@gmail.com" /*from*/, "s2tore@gmail.com"/*to*/);
+
+                    msg.Subject = tempMail.Subject;
+
+                    msg.IsBodyHtml = true;
+                    msg.Body = tempMail.EmailContent;
+
+                    /* msg.Priority = MailPriority.High;*/
+
+                    using (var smtp = new SmtpClient())
+                    {
+                        smtp.Host = _configuration.GetValue<string>("ServerSMTP:host");
+                        smtp.Port = _configuration.GetValue<int>("ServerSMTP:port");
+
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new System.Net.NetworkCredential(_smtpUsername, _smtpPassword);
+
+                        smtp.EnableSsl = _configuration.GetValue<bool>("ServerSMTP:ssl");
+                        /*smtp.Timeout = 2000;*/
+                        smtp.Send(msg);
+                    }
+
+                    tempMail.IsSend = true;
+
+                    await UpdateMail(tempMail);
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }
+

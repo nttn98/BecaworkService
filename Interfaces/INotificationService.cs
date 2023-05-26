@@ -11,6 +11,8 @@ namespace BecaworkService.Interfaces
         Task<QueryResult<Notification>> GetNotifications(QueryParams queryParams);
         Task<Notification> GetNotificationByID(long ID);
         Task<Notification> AddNotifi(Notification objNotifi);
+        Task<bool> SendNotifi(Notification objNotifi);
+
         Task<Notification> UpdateNotifi(Notification objNotifi);
         bool DeleteNotifi(long ID);
     }

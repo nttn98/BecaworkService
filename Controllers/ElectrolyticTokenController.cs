@@ -8,6 +8,8 @@ using BecaworkService.Services;
 
 namespace BecaworkService.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ElectrolyticTokenController : ControllerBase
     {
         public readonly IElectrolyticTokenService _eTokenService;

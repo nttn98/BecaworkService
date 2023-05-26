@@ -12,6 +12,7 @@ namespace BecaworkService.Interfaces
         Task<Mail> AddMail(Mail objMail);
         Task<Mail> UpdateMail(Mail objMail);
         bool DeteleMail(long ID);
+        Task<bool> SendMailBySMTP(long ID);
 
     }
 }

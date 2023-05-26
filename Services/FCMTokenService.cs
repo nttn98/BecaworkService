@@ -19,7 +19,7 @@ namespace BecaworkService.Services
 
         public FCMTokenService(BecaworkDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<FCMToken> AddFCMToken(FCMToken objFCMToken)
@@ -87,7 +87,7 @@ namespace BecaworkService.Services
                 var columnsMap = new Dictionary<string, Expression<Func<FCMToken, object>>>()
                 {
                     ["id"] = s => s.Id,
-                    ["mail"] = s => s.Mail,
+                    ["email"] = s => s.Email,
                     ["token"] = s => s.Token,
                     ["lastmodified"] = s => s.LastModified,
                     ["createdtime"] = s => s.CreatedTime
@@ -100,7 +100,7 @@ namespace BecaworkService.Services
                      && ((string.IsNullOrEmpty(queryParams.Content)
                         || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Token, $"%{queryParams.Content}%")
-                        || EF.Functions.Like(x.Mail.ToString(), $"%{queryParams.Content}%"))))),
+                        || EF.Functions.Like(x.Email, $"%{queryParams.Content}%"))))),
                     include: null,
 
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))

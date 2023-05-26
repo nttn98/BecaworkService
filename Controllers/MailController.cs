@@ -67,5 +67,21 @@ namespace BecaworkService.Controllers
             _mailService.DeteleMail(ID);
             return new JsonResult("Delete Mail Successfully");
         }
+
+        [HttpPost]
+        [Route("SendMailBySMTP/{ID}")]
+        public async Task<IActionResult> SendMailBySMTP(long ID)
+        {
+            var isSend = await _mailService.SendMailBySMTP(ID);
+            if (!isSend)
+            {
+                await _mailService.SendMailBySMTP(ID);
+            }
+            else
+            {
+                return Ok("Send mail successfully");
+            }
+            return Ok("error");
+        }
     }
 }

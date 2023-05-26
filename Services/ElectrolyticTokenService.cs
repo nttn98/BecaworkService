@@ -88,7 +88,7 @@ namespace BecaworkService.Services
                 {
                     ["id"] = s => s.Id,
                     ["token"] = s => s.Token,
-                    ["mail"] = s => s.Mail,
+                    ["email"] = s => s.Email,
                     ["lastmodified"] = s => s.LastModified,
                     ["createdtime"] = s => s.CreatedTime
                 };
@@ -100,7 +100,7 @@ namespace BecaworkService.Services
                      && ((string.IsNullOrEmpty(queryParams.Content)
                         || (EF.Functions.Like(x.Id.ToString(), $"%{queryParams.Content}%")
                         || EF.Functions.Like(x.Token, $"%{queryParams.Content}%")
-                        || EF.Functions.Like(x.Mail.ToString(), $"%{queryParams.Content}%"))))),
+                        || EF.Functions.Like(x.Email.ToString(), $"%{queryParams.Content}%"))))),
                     include: null,
 
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
