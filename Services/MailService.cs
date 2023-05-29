@@ -271,9 +271,9 @@ namespace BecaworkService.Services
         public async Task<bool> SendMailBySMTP(long ID)
         {
 
-           /* string _smtpUsername = "reroll.t.o.fantasy1@gmail.com";
-            string _smtpPassword = "coigifjgmhtvgmce";*/
-            
+            /* string _smtpUsername = "reroll.t.o.fantasy1@gmail.com";
+             string _smtpPassword = "coigifjgmhtvgmce";*/
+
             string _smtpUsername = _configuration.GetValue<string>("Account:username");
             string _smtpPassword = _configuration.GetValue<string>("Account:password");
 
