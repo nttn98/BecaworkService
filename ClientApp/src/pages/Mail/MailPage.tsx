@@ -103,14 +103,30 @@ export default function MailPage() {
         <Space size="middle">
           <Link to={"/mail/" + record.id}>Detail</Link>
           <Link to={"/mail/update/" + record.id}>Update</Link>
+          <Button type="link" onClick={() => handleDelete(record.id)}>
+            Delete
+          </Button>
           {record.isSend === false && (
-            <Button onClick={() => handleResend(record.id)}>Resend</Button>
+            <Button type="link" onClick={() => handleResend(record.id)}>
+              Resend
+            </Button>
           )}
         </Space>
       ),
     },
   ];
-
+  const handleDelete = (mailID: number) => {
+    try {
+      axios
+        .delete(`/api/Mail/DeleteMail/${mailID}`)
+        .then((response) => console.log(response));
+      message.success(`Delete successful`);
+      console.log(`delete success id :${mailID}`);
+      fetchData();
+    } catch {
+      message.error("delete error");
+    }
+  };
   const handleResend = async (mailID: number) => {
     setLoading(true);
     try {
@@ -188,7 +204,9 @@ export default function MailPage() {
         onChange={(e) => setSearchText(e.target.value)}
         type="text"
       />
-
+      <Button type="primary">
+        <Link to={"/mail/create"}>Create new mail</Link>
+      </Button>
       <Select
         style={{ width: 100, margin: 10 }}
         placeholder="Select a person"
@@ -220,7 +238,7 @@ export default function MailPage() {
         value={[fromDate, toDate]}
       />
 
-      <button onClick={onReset}> reset</button>
+      <Button onClick={onReset}> reset</Button>
 
       <Table
         columns={columns}

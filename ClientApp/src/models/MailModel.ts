@@ -3,7 +3,7 @@ export type MailModel = {
     email: string;
     emailContent: string
     subject: string;
-    createby: string;
+    createBy: string;
     createTime :string;
     isSend : boolean;
     sendTime : string;

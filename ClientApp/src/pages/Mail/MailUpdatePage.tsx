@@ -32,7 +32,7 @@ export const MailUpdatePage = () => {
       message.success("Update Successfully");
     });
 
-    setShowAlert(true);
+    // setShowAlert(true);
   };
 
   let navigate = useNavigate();
@@ -62,14 +62,14 @@ export const MailUpdatePage = () => {
             style={{ maxWidth: 600 }}
             onFinish={onFinish}
             initialValues={{
-              id: id,
+              id: data.id,
               email: data.email,
               emailContent: data.emailContent,
               subject: data.subject,
-              createby: data.createby,
-              createtime: data.createTime,
-              sendtime: data.sendTime,
-              isSend: data.isSend ? "Yes" : "No",
+              createBy: data.createBy,
+              createTime: data.createTime,
+              sendTime: data.sendTime,
+              isSend: data.isSend,
               sendStatus: data.sentStatus,
               mailType: data.mailType,
             }}
@@ -84,16 +84,16 @@ export const MailUpdatePage = () => {
             <Form.Item label="Subject" name="subject">
               <Input />
             </Form.Item>
-            <Form.Item label="Create by" name="createby">
+            <Form.Item label="Create by" name="createBy">
               <Input />
             </Form.Item>
-            <Form.Item label="Create time" name="createtime">
+            <Form.Item label="Create time" name="createTime">
               <Input />
             </Form.Item>
-            <Form.Item label="Send time" name="sendtime">
+            <Form.Item label="Send time" name="sendTime">
               <Input />
             </Form.Item>
-            <Form.Item name="isSend" label="Is Send">
+            <Form.Item label="Is Send" name="isSend">
               <Input disabled />
             </Form.Item>
             <Form.Item label="Send status" name="sendStatus">
