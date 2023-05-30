@@ -44,6 +44,9 @@ const router = createBrowserRouter([
     path: "mail/update/:id",
     element: <MailUpdatePage />,
   },
+  {
+    path: "mail/resend/:id",
+  },
 ]);
 
 export default () => (

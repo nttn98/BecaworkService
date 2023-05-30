@@ -29,9 +29,7 @@ export const MailUpdatePage = () => {
     console.log(values);
     axios.put("/api/mail/UpdateMail", values).then((res) => {
       console.log(res.data);
-      message.success(
-        <Alert message="Update Mail Successfully" type="success" />
-      );
+      message.success("Update Successfully");
     });
 
     setShowAlert(true);
@@ -66,11 +64,12 @@ export const MailUpdatePage = () => {
             initialValues={{
               id: id,
               email: data.email,
+              emailContent: data.emailContent,
               subject: data.subject,
               createby: data.createby,
               createtime: data.createTime,
               sendtime: data.sendTime,
-              isSend: data.isSend,
+              isSend: data.isSend ? "Yes" : "No",
               sendStatus: data.sentStatus,
               mailType: data.mailType,
             }}
@@ -95,25 +94,15 @@ export const MailUpdatePage = () => {
               <Input />
             </Form.Item>
             <Form.Item name="isSend" label="Is Send">
-              <Select
-                defaultValue={data.isSend}
-                style={{ width: "100%" }}
-                options={[
-                  {
-                    value: false,
-                    label: "No",
-                  },
-                  {
-                    value: true,
-                    label: "Yes",
-                  },
-                ]}
-              />
+              <Input disabled />
             </Form.Item>
             <Form.Item label="Send status" name="sendStatus">
-              <Input />
+              <Input disabled />
             </Form.Item>
             <Form.Item label="Mail type" name="mailType">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Content" name="emailContent">
               <Input />
             </Form.Item>
 
