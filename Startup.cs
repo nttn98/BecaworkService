@@ -32,6 +32,12 @@ namespace BecaworkService
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IFCMTokenLogService, FCMTokenLogService>();
+
+            services.AddScoped<IFCMTokenService, FCMTokenService>();
+            services.AddScoped<IElectrolyticTokenService, ElectrolyticTokenService>();
+            services.AddScoped<IElectrolyticTokenLogService, ElectrolyticTokenLogService>();
+
+            //connect DB
             services.AddDbContext<BecaworkDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // In production, the React files will be served from this directory

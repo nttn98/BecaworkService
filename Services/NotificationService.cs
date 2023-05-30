@@ -4,10 +4,14 @@ using BecaworkService.Models;
 using BecaworkService.Models.Responses;
 using BecaworkService.Respository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Services
@@ -15,32 +19,14 @@ namespace BecaworkService.Services
     public class NotificationService : INotificationService
     {
         private readonly BecaworkDbContext _context;
+        private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public NotificationService(BecaworkDbContext context)
+        public NotificationService(BecaworkDbContext context, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
-        public async Task<NotificationResponse> GetNotifications(int page, int pageSize)
-        {
-            var total = await _context.Notifications.CountAsync();
-            if (page == 0 && pageSize == 0)
-            {
-                var notifications = await _context.Notifications.ToListAsync();
-                return new NotificationResponse
-                {
-                    Total = total,
-                    Data = notifications
-                };
-            }
-            else
-            {
-                var notifications = await _context.Notifications.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-                return new NotificationResponse
-                {
-                    Total = total,
-                    Data = notifications
-                };
-            }
+            _httpClient = new HttpClient();
+            _configuration= configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         /*public async Task<NotificationResponse> GetNotifications1(QueryParams queryParams)
@@ -72,7 +58,7 @@ namespace BecaworkService.Services
             }
             if (queryParams.FromDate == null || queryParams.ToDate == null)
             {
-                if (!string.IsNullOrEmpty(queryParams.Content)) // have content
+                if (!string.IsNullOrEmpty(queryParams.Content)) // have requestBody
                 {
                     if (queryParams.IsSortAscending)
                     {
@@ -95,7 +81,7 @@ namespace BecaworkService.Services
                               ).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).Skip((queryParams.Page - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToListAsync();
                     }
                 }
-                else //no content
+                else //no requestBody
                 {
                     if (queryParams.IsSortAscending)
                     {
@@ -110,7 +96,7 @@ namespace BecaworkService.Services
             // queryParams.FromDate and queryParams.ToDate "NOT null"
             else
             {
-                if (!string.IsNullOrEmpty(queryParams.Content)) // have content
+                if (!string.IsNullOrEmpty(queryParams.Content)) // have requestBody
                 {
                     if (queryParams.IsSortAscending)
                     {
@@ -138,7 +124,7 @@ namespace BecaworkService.Services
                               ).OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]).ToListAsync();
                     }
                 }
-                else //no content
+                else //no requestBody
                 {
                     if (queryParams.IsSortAscending)
                     {
@@ -162,9 +148,9 @@ namespace BecaworkService.Services
             };
         }*/
 
-        public async Task<QueryResult<Notification>> GetNotifications2(QueryParams queryParams)
+        public async Task<QueryResult<Notification>> GetNotifications(QueryParams queryParams)
         {
-            var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var result = new QueryResult<Notification>();
 
             if (queryParams.Page == 0)
@@ -205,7 +191,7 @@ namespace BecaworkService.Services
 
                     include: null,
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
-                                                                                ? source.OrderBy(d => d.CreatedTime)
+                                                                                ? source.OrderByDescending(d => d.CreatedTime)
                                                                                 : queryParams.IsSortAscending
                                                                                 ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
@@ -253,6 +239,60 @@ namespace BecaworkService.Services
                 result = false;
             }
             return result;
+        }
+
+        public async Task<bool> SendNotifi(Notification objNotifi)
+        {
+            string apiUrl = "https://service.vntts.vn/FcmToken/SendNotification";
+            using (HttpClient client = new HttpClient())
+            {
+
+                var param = new Dictionary<string, string>
+                {
+                    {"Key", "CO3SerivceKeyT8475834B" }
+                };
+
+                var queryString = new StringBuilder();
+
+                foreach (var kvp in param)
+                {
+                    queryString.Append($"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}&");
+                }
+
+                apiUrl += "?" + queryString.ToString().TrimEnd('&');
+
+
+                var bodyData = new Dictionary<string, object>
+                {
+                    {
+                        "registration_ids", new List<string>
+                        {
+                            "tienth1@vntt.com.vn",
+                            "hautp1@vntt.com.vn"
+                        }
+                    },
+                    {
+                        "notification", new Dictionary<string, string>
+                        {
+                            { "title", "Thực tập VNTTS Test" },
+                            { "body","abc test xyz" }
+                        }
+                    },
+                    { "type", "ThuVien" },
+                    { "from", "ĐÀM ĐỨC DUY"},
+                    { "url", "https://library.vntts.vn/library/mydrive"}
+                };
+
+                var jsonBody = JsonSerializer.Serialize(bodyData);
+
+                var requestBody = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, requestBody);
+
+                response.ToString();
+
+                return response.IsSuccessStatusCode;
+            }
         }
     }
 }

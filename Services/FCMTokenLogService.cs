@@ -4,10 +4,13 @@ using BecaworkService.Models;
 using BecaworkService.Models.Responses;
 using BecaworkService.Respository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Services
@@ -15,20 +18,11 @@ namespace BecaworkService.Services
     public class FCMTokenLogService : IFCMTokenLogService
     {
         private readonly BecaworkDbContext _context;
-
-        public FCMTokenLogService(BecaworkDbContext context)
+        private readonly IConfiguration _configuration;
+        public FCMTokenLogService(BecaworkDbContext context, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
-        public async Task<IEnumerable<FCMTokenLog>> GetFCMTokenLogs(int page, int pageSize)
-        {
-            if (pageSize == 0)
-            {
-                pageSize = 50;
-            }
-            var tempFCMTokenLogs = _context.FCMTokenLogs.ToList().Skip((page - 1) * pageSize).Take(pageSize);
-            return tempFCMTokenLogs;
-
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
         /* public async Task<IEnumerable<FCMTokenLog>> GetFCMTokenLogs2(QueryParams queryParams)
          {
@@ -135,9 +129,9 @@ namespace BecaworkService.Services
              return tempFCMTokenLogs;
          }*/
 
-        public async Task<QueryResult<FCMTokenLog>> GetFCMTokenLogs2(QueryParams queryParams)
+        public async Task<QueryResult<FCMTokenLog>> GetFCMTokenLogs(QueryParams queryParams)
         {
-            var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var result = new QueryResult<FCMTokenLog>();
             if (queryParams.Page == 0)
             {
@@ -165,7 +159,7 @@ namespace BecaworkService.Services
                     include: null,
 
                     orderBy: source => (String.IsNullOrEmpty(queryParams.SortBy) || !columnsMap.ContainsKey(queryParams.SortBy.ToLower()))
-                                                                                ? source.OrderBy(d => d.CreatedTime)
+                                                                                ? source.OrderByDescending(d => d.CreatedTime)
                                                                                 : queryParams.IsSortAscending
                                                                                 ? source.OrderBy(columnsMap[queryParams.SortBy.ToLower()])
                                                                                 : source.OrderByDescending(columnsMap[queryParams.SortBy.ToLower()]),
@@ -182,14 +176,12 @@ namespace BecaworkService.Services
             return tempGetFCMTokenLog;
         }
 
-        /*    public async Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog)
-            {
-                _context.FCMTokenLogs.Add(objFCMTokenLog);
-                await _context.SaveChangesAsync();
-                return objFCMTokenLog;
-            }*/
-
-
+        public async Task<FCMTokenLog> AddFCMTokenLog(FCMTokenLog objFCMTokenLog)
+        {
+            _context.FCMTokenLogs.Add(objFCMTokenLog);
+            await _context.SaveChangesAsync();
+            return objFCMTokenLog;
+        }
 
         public async Task<FCMTokenLog> UpdateFCMTokenLog(FCMTokenLog objFCMTokenLog)
         {
@@ -214,5 +206,6 @@ namespace BecaworkService.Services
             }
             return result;
         }
+
     }
 }

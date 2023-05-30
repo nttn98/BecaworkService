@@ -3,6 +3,7 @@ using BecaworkService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Controllers
@@ -12,32 +13,26 @@ namespace BecaworkService.Controllers
     public class NotificationController : ControllerBase
     {
         public readonly INotificationService _notificationService;
+        private readonly HttpClient _httpClient;
         public NotificationController(INotificationService notificationService)
         {
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+            _httpClient = new HttpClient();
         }
+
+        /*   [HttpGet]
+           [Route("GetNotifications1")]
+           public async Task<IActionResult> GetNotifications1([FromQuery] QueryParams queryParams)
+           {
+               var tempNotifi = await _notificationService.GetNotifications1(queryParams);
+               return Ok(tempNotifi);
+           }*/
 
         [HttpGet]
         [Route("GetNotifications")]
-        public async Task<IActionResult> GetNotifications(int page, int pageSize)
+        public async Task<IActionResult> GetNotifications([FromQuery] QueryParams queryParams)
         {
-            var tempNotifi = await _notificationService.GetNotifications(page, pageSize);
-            return Ok(tempNotifi);
-        }
-
-     /*   [HttpGet]
-        [Route("GetNotifications1")]
-        public async Task<IActionResult> GetNotifications1([FromQuery] QueryParams queryParams)
-        {
-            var tempNotifi = await _notificationService.GetNotifications1(queryParams);
-            return Ok(tempNotifi);
-        }*/
-
-        [HttpGet]
-        [Route("GetNotifications2")]
-        public async Task<IActionResult> GetNotifications2([FromQuery] QueryParams queryParams)
-        {
-            var tempNotifi = await _notificationService.GetNotifications2(queryParams);
+            var tempNotifi = await _notificationService.GetNotifications(queryParams);
             return Ok(tempNotifi);
         }
 
@@ -76,6 +71,21 @@ namespace BecaworkService.Controllers
             _notificationService.DeleteNotifi(ID);
             return new JsonResult("Delete Notification Successfully");
 
+        }
+
+        [HttpPost]
+        [Route("SendNofiti")]
+        public async Task<IActionResult> SendNotifi(Notification notification)
+        {
+            bool isSent = await _notificationService.SendNotifi(notification);
+            if (isSent)
+            {
+                return Ok("Notification sent successfully");
+            }
+            else
+            {
+                return BadRequest("Failed to send notification");
+            }
         }
     }
 }

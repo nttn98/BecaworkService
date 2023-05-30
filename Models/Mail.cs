@@ -19,7 +19,7 @@ namespace BecaworkService.Models
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public string Location { get; set; }
-        public int MailType { get; set; }
+        public int? MailType { get; set; }
         public string Organizer { get; set; }
         public string OrganizerMail { get; set; }
         public string UID { get; set; }
