@@ -32,11 +32,12 @@ export default function MailPage() {
   const [searchText, setSearchText] = useState<string | undefined>();
   const [isSend, setisSend] = useState<string | undefined>();
   const [sortBy, setSortBy] = useState<string | undefined>();
-  const [isAscend, setisAscend] = useState<boolean | undefined>(undefined);
+  const [isAscend, setisAscend] = useState<boolean | undefined>();
 
   const [rangeDate, setRangeDate] = useState([] || "");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [dropdownOptions, setDropdownOptions] = useState([]);
 
   const columns: ColumnsType<MailModel> = [
     {
@@ -81,15 +82,15 @@ export default function MailPage() {
   ];
 
   const handleTitleClick = (column: string) => {
+    setSortBy(column);
+    console.log(sortBy);
+    console.log(isAscend);
     if (sortBy === column && isAscend == true) {
       setisAscend(false);
-      console.log(isAscend);
-      handleInputChange();
     } else {
       setSortBy(column);
       setisAscend(true);
       console.log(isAscend);
-      handleInputChange();
     }
   };
 
@@ -108,7 +109,7 @@ export default function MailPage() {
     isSend,
     sortBy: sortBy,
     IsSortAscending: isAscend,
-    createTime: `${fromDate} ${toDate}`,
+    //createTime: `${fromDate} ${toDate}`,
   };
 
   const handleInputChange = async () => {
@@ -126,6 +127,7 @@ export default function MailPage() {
     }
     setLoading(false);
   };
+
   const handleDateChange = (dates: any) => {
     if (dates && dates.length === 2) {
       const [start, end] = dates;
@@ -140,6 +142,7 @@ export default function MailPage() {
     console.log(fromDate);
     console.log(toDate);
   };
+
   function onReset() {
     setSortBy(undefined);
     setisAscend(undefined);
@@ -148,6 +151,7 @@ export default function MailPage() {
     handleDateChange([]);
     handleInputChange();
   }
+
   const onChange = async (value: string) => {
     setisSend(value);
   };
@@ -158,7 +162,7 @@ export default function MailPage() {
 
   useEffect(() => {
     handleInputChange();
-  }, [fromDate, toDate, sortBy, isSend, searchText, page, pageSize]);
+  }, [fromDate, toDate, sortBy, isSend, searchText, page, pageSize, isAscend]);
 
   return (
     <div>
