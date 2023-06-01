@@ -9,21 +9,24 @@ using BecaworkService.Helper;
 using BecaworkService.Models.Responses;
 using System.Linq.Expressions;
 using BecaworkService.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace BecaworkService.Services
 {
     public class ElectrolyticTokenLogService : IElectrolyticTokenLogService
     {
         private readonly BecaworkDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public ElectrolyticTokenLogService(BecaworkDbContext context)
+        public ElectrolyticTokenLogService(BecaworkDbContext context, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public async Task<QueryResult<ElectrolyticTokenLog>> GetElectrolyticTokenLogs(QueryParams queryParams)
         {
-            var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var result = new QueryResult<ElectrolyticTokenLog>();
             if (queryParams.Page == 0)
             {

@@ -5,6 +5,7 @@ using BecaworkService.Models.Responses;
 using BecaworkService.Respository;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,12 @@ namespace BecaworkService.Services
     public class FCMTokenService : IFCMTokenService
     {
         private readonly BecaworkDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public FCMTokenService(BecaworkDbContext context)
+        public FCMTokenService(BecaworkDbContext context, IConfiguration configuration)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public async Task<FCMToken> AddFCMToken(FCMToken objFCMToken)
@@ -75,7 +78,7 @@ namespace BecaworkService.Services
 
         public async Task<QueryResult<FCMToken>> GetFCMTokens(QueryParams queryParams)
         {
-            var connectionString = "Data Source=180.148.1.178,1577;Initial Catalog=CO3.Service;Persist Security Info=True;TrustServerCertificate=True;User ID=thuctap;Password=vntt@123";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var result = new QueryResult<FCMToken>();
             if (queryParams.Page == 0)
             {

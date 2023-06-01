@@ -64,8 +64,13 @@ namespace BecaworkService.Controllers
         [Route("DeleteMail/{ID}")]
         public JsonResult Delete(long ID)
         {
-            _mailService.DeteleMail(ID);
+            if (_mailService.DeteleMail(ID)) { 
             return new JsonResult("Delete Mail Successfully");
+            }
+            else
+            {
+                return new JsonResult("Delete Mail Fail");
+            }
         }
 
         [HttpPost]
