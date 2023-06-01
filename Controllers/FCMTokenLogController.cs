@@ -3,8 +3,6 @@ using BecaworkService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BecaworkService.Controllers
@@ -16,9 +14,9 @@ namespace BecaworkService.Controllers
         public readonly IFCMTokenLogService _FCMTokenLogService;
        /* private readonly HttpClient _httpClient;*/
 
-        public FCMTokenLogController(IFCMTokenLogService FCMTokenService)
+        public FCMTokenLogController(IFCMTokenLogService FCMTokenLogService)
         {
-            _FCMTokenLogService = FCMTokenService ?? throw new ArgumentNullException(nameof(FCMTokenService));
+            _FCMTokenLogService = FCMTokenLogService ?? throw new ArgumentNullException(nameof(FCMTokenLogService));
             /*_httpClient = httpClient ?? throw new ArgumentNullException();*/
         }
 

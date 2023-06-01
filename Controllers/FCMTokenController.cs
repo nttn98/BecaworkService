@@ -30,7 +30,7 @@ namespace BecaworkService.Controllers
 
         [HttpGet]
         [Route("GetFCMTokens")]
-        public async Task<IActionResult> GetFCMTokens2([FromQuery] QueryParams queryParams)
+        public async Task<IActionResult> GetFCMTokens([FromQuery] QueryParams queryParams)
         {
             var tempFCMTokens = await _fCMTokenService.GetFCMTokens(queryParams);
             return Ok(tempFCMTokens);

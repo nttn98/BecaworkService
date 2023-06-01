@@ -29,7 +29,7 @@ namespace BecaworkService.Controllers
 
         [HttpGet]
         [Route("GetElectrolyticTokens")]
-        public async Task<IActionResult> GetElectrolyticTokens2([FromQuery] QueryParams queryParams)
+        public async Task<IActionResult> GetElectrolyticTokens([FromQuery] QueryParams queryParams)
         {
             var ElectrolyticTokens = await _eTokenService.GetElectrolyticTokens(queryParams);
             return Ok(ElectrolyticTokens);
