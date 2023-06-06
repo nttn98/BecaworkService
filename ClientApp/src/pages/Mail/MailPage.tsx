@@ -198,7 +198,14 @@ export default function MailPage() {
 
   useEffect(() => {
     fetchData();
-  }, [fromDate, toDate, sortOrder, sortBy, isSend, searchText, page, pageSize]);
+  }, [fromDate, toDate, sortOrder, sortBy, isSend, page, pageSize]);
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      fetchData();
+    }, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [searchText]);
 
   return (
     <div>
