@@ -11,6 +11,7 @@ import {
   message,
   DatePicker,
   Popconfirm,
+  Divider,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { FC, useEffect, useMemo, useState } from "react";
@@ -36,7 +37,7 @@ export default function MailPage() {
   const [searchText, setSearchText] = useState<string | undefined>();
 
   const [sortBy, setSortBy] = useState<any>();
-  const [sortOrder, setSortOrder] = useState<boolean | "">();
+  const [sortOrder, setSortOrder] = useState<boolean | undefined>();
 
   const [isSend, setisSend] = useState<string | undefined>();
 
@@ -46,8 +47,10 @@ export default function MailPage() {
   const DATE_FORMAT = "YYYY-MM-DDTHH:mm:ss.sss";
 
   const handTitleClick = (column: string) => {
-    if (sortBy === column && sortOrder == true) {
+    if (sortBy === column && sortOrder === true) {
       setSortOrder(false);
+    } else if (sortBy === column && sortOrder === false) {
+      setSortOrder(undefined);
     } else {
       setSortBy(column);
       setSortOrder(true);
@@ -57,6 +60,7 @@ export default function MailPage() {
     {
       title: "Id",
       dataIndex: "id",
+      sorter: true,
       onHeaderCell: () => ({
         onClick: () => handTitleClick("id"),
       }),
@@ -64,6 +68,7 @@ export default function MailPage() {
     {
       title: "Email",
       dataIndex: "email",
+      sorter: true,
       onHeaderCell: () => ({
         onClick: () => handTitleClick("email"),
       }),
@@ -100,7 +105,7 @@ export default function MailPage() {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Space size="middle">
+        <Space split={<Divider type="vertical" />} size="small">
           <Link to={"/mail/" + record.id}>Detail</Link>
           <Link to={"/mail/update/" + record.id}>Update</Link>
           <Popconfirm
@@ -110,10 +115,16 @@ export default function MailPage() {
             okText="Yes"
             cancelText="No"
           >
-            <Button type="link">Delete</Button>
+            <Button type="link" style={{ padding: 0 }} danger>
+              Delete
+            </Button>
           </Popconfirm>
           {record.isSend === false && (
-            <Button type="link" onClick={() => handleResend(record.id)}>
+            <Button
+              type="link"
+              style={{ padding: 0 }}
+              onClick={() => handleResend(record.id)}
+            >
               Resend
             </Button>
           )}
