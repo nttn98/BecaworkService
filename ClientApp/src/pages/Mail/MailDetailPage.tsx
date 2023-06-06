@@ -49,7 +49,7 @@ export const MailDetailPage = () => {
             <Col span={4} className="title-details">
               Create By
             </Col>
-            <Col span={4}>{data.createby}</Col>
+            <Col span={4}>{data.createBy}</Col>
           </Row>
           <Row>
             <Col span={4} className="title-details">

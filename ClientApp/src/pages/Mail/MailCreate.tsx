@@ -14,6 +14,7 @@ import {
   Alert,
   message,
   DatePicker,
+  DatePickerProps,
 } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
@@ -21,9 +22,11 @@ import axios from "axios";
 import moment from "moment";
 import { error, info } from "console";
 import Moment from "react-moment";
+import dayjs from "dayjs";
+import { format } from "path";
+
 export const MailCreate = () => {
   const { id } = useParams();
-  const [showAlert, setShowAlert] = useState(false);
   const onFinish = (values: any) => {
     console.log(values);
     try {
@@ -35,6 +38,9 @@ export const MailCreate = () => {
       message.error("Create fail");
     }
     // setShowAlert(true);
+  };
+  const onChange: DatePickerProps["onChange"] = (date, dateString) => {
+    console.log(dayjs(date).format("YYYY-MM-DDTHH:mm:ss:SSS"));
   };
 
   let navigate = useNavigate();
@@ -76,10 +82,10 @@ export const MailCreate = () => {
             <Input />
           </Form.Item>
           <Form.Item label="Create time" name="createTime">
-            <Input />
+            <DatePicker />
           </Form.Item>
           <Form.Item label="Send time" name="sendTime">
-            <Input />
+            <DatePicker />
           </Form.Item>
           <Form.Item label="Is Send" name="isSend">
             <Input disabled />
