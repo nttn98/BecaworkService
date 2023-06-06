@@ -10,7 +10,7 @@ import {
   Tag,
   message,
   DatePicker,
-  DatePickerProps,
+  Popconfirm,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { FC, useEffect, useMemo, useState } from "react";
@@ -106,6 +106,15 @@ export default function MailPage() {
           <Button type="link" onClick={() => handleDelete(record.id)}>
             Delete
           </Button>
+          <Popconfirm
+            title="Delete the mail"
+            description="Are you sure to delete this mail?"
+            onConfirm={() => handleDelete(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="link">Delete</Button>
+          </Popconfirm>
           {record.isSend === false && (
             <Button type="link" onClick={() => handleResend(record.id)}>
               Resend
@@ -115,6 +124,7 @@ export default function MailPage() {
       ),
     },
   ];
+
   const handleDelete = (mailID: number) => {
     try {
       axios
