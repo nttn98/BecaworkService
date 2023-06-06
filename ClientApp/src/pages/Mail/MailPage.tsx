@@ -103,9 +103,6 @@ export default function MailPage() {
         <Space size="middle">
           <Link to={"/mail/" + record.id}>Detail</Link>
           <Link to={"/mail/update/" + record.id}>Update</Link>
-          <Button type="link" onClick={() => handleDelete(record.id)}>
-            Delete
-          </Button>
           <Popconfirm
             title="Delete the mail"
             description="Are you sure to delete this mail?"

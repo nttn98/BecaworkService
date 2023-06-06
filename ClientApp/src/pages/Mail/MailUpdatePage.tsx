@@ -13,17 +13,19 @@ import {
   Select,
   Alert,
   message,
+  DatePicker,
 } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-import moment from "moment";
+import dayjs from "dayjs";
 import { info } from "console";
 
 export const MailUpdatePage = () => {
   const { id } = useParams();
   const [data, setData] = useState<MailModel | undefined>();
   const [showAlert, setShowAlert] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const onFinish = (values: any) => {
     console.log(values);
@@ -35,6 +37,8 @@ export const MailUpdatePage = () => {
     // setShowAlert(true);
   };
 
+  const dateFormat = "YYYY-MM-DD";
+
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -42,6 +46,7 @@ export const MailUpdatePage = () => {
       console.log(res.data);
       if (res) {
         setData(res.data);
+        setSelectedDate(res.data.createTime);
       }
     });
   }, []);
@@ -67,8 +72,8 @@ export const MailUpdatePage = () => {
               emailContent: data.emailContent,
               subject: data.subject,
               createBy: data.createBy,
-              createTime: data.createTime,
-              sendTime: data.sendTime,
+              createTime: dayjs(data.createTime),
+              sendTime: dayjs(data.sendTime),
               isSend: data.isSend,
               sendStatus: data.sentStatus,
               mailType: data.mailType,
@@ -88,10 +93,10 @@ export const MailUpdatePage = () => {
               <Input />
             </Form.Item>
             <Form.Item label="Create time" name="createTime">
-              <Input />
+              <DatePicker format={dateFormat} />
             </Form.Item>
             <Form.Item label="Send time" name="sendTime">
-              <Input />
+              <DatePicker format={dateFormat} />
             </Form.Item>
             <Form.Item label="Is Send" name="isSend">
               <Input disabled />
