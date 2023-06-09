@@ -279,7 +279,7 @@ namespace BecaworkService.Services
             {
                 try
                 {
-                    MailMessage msg = new MailMessage("reroll.t.o.fantasy1@gmail.com" /*from*/, "s2tore@gmail.com"/*to*/);
+                    MailMessage msg = new MailMessage(tempMail.Email /*from*/, "s2tore@gmail.com"/*to*/);
 
                     msg.Subject = tempMail.Subject;
 
