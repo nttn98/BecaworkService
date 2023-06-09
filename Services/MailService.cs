@@ -266,27 +266,17 @@ namespace BecaworkService.Services
             }
             return result;
         }
-
-
         public async Task<bool> SendMailBySMTP(long ID)
         {
-
             /* string _smtpUsername = "reroll.t.o.fantasy1@gmail.com";
              string _smtpPassword = "coigifjgmhtvgmce";*/
-
             string _smtpUsername = _configuration.GetValue<string>("Account:username");
             string _smtpPassword = _configuration.GetValue<string>("Account:password");
-
 
             var tempMail = await _context.Mails.FindAsync(ID);
 
             if (tempMail.IsSend == false)
             {
-                /*if (String.IsNullOrEmpty(tempMail.EmailCC) && String.IsNullOrEmpty(tempMail.Subject) && String.IsNullOrEmpty(tempMail.EmailContent))
-                {
-                    return false;
-                }*/
-
                 try
                 {
                     MailMessage msg = new MailMessage("reroll.t.o.fantasy1@gmail.com" /*from*/, "s2tore@gmail.com"/*to*/);
@@ -295,9 +285,7 @@ namespace BecaworkService.Services
 
                     msg.IsBodyHtml = true;
                     msg.Body = tempMail.EmailContent;
-
                     /* msg.Priority = MailPriority.High;*/
-
                     using (var smtp = new SmtpClient())
                     {
                         smtp.Host = _configuration.GetValue<string>("ServerSMTP:host");
