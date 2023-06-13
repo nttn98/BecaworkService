@@ -49,6 +49,7 @@ namespace BecaworkService.Controllers
         public async Task<IActionResult> Post(ElectrolyticToken eToken)
         {
             var tempETokens = await _eTokenService.AddElectrolyticToken(eToken);
+            if(tempETokens.Id ==0)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
             }

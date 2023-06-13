@@ -18,13 +18,13 @@ namespace BecaworkService.Controllers
             _eTokenLogService = eTokenLogService ?? throw new ArgumentNullException(nameof(eTokenLogService));
         }
 
-       /* [HttpGet]
-        [Route("GetElectrolyticTokens")]
-        public async Task<IActionResult> GetElectrolyticLogTokens(int page, int pageSize)
-        {
-            var eTokenLogs = await _eTokenLogService.GetElectrolyticTokenLogs(page, pageSize);
-            return Ok(eTokenLogs);
-        }*/
+        /* [HttpGet]
+         [Route("GetElectrolyticTokens")]
+         public async Task<IActionResult> GetElectrolyticLogTokens(int page, int pageSize)
+         {
+             var eTokenLogs = await _eTokenLogService.GetElectrolyticTokenLogs(page, pageSize);
+             return Ok(eTokenLogs);
+         }*/
 
         [HttpGet]
         [Route("GetElectrolyticTokenLogs")]
@@ -48,6 +48,7 @@ namespace BecaworkService.Controllers
         public async Task<IActionResult> Post(ElectrolyticTokenLog objETokenLog)
         {
             var eTokens = await _eTokenLogService.AddElectrolyticTokenLog(objETokenLog);
+            if (eTokens.Id == 0)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
             }
