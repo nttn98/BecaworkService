@@ -44,26 +44,17 @@ namespace BecaworkService.Controllers
         public async Task<IActionResult> Post(FCMTokenLog objFCMTokenLog)
         {
             var tempFCMTokenLog = await _FCMTokenLogService.AddFCMTokenLog(objFCMTokenLog);
-            /*if (tempFCMTokenLog.Id == 0)
+            if (tempFCMTokenLog.Id == 0)
             {
-                var content = new FormUrlEncodedContent(new[]
-                {
-                new KeyValuePair<string,string>("ID", objFCMTokenLog.Id.ToString())
-                });
-
-                var response = await _httpClient.PostAsync("https://service.vntts.vn/FcmToken/SendNotification", content);
-                if (!response.IsSuccessStatusCode)
-                {
-                    return Ok(content);
-                }
-            }*/
+                return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
+            }
             return Ok("Added FCMTokenLog Successfully");
         }
 
         //Update FCMTokenLog
         [HttpPut]
         [Route("UpdateFCMTokenLog")]
-        public async Task<IActionResult> Put(FCMTokenLog objFCMTokenLog)
+        public async Task<IActionResult> Update(FCMTokenLog objFCMTokenLog)
         {
             await _FCMTokenLogService.UpdateFCMTokenLog(objFCMTokenLog);
             return Ok("Update FCMTokenLog Successfully");

@@ -48,6 +48,7 @@ namespace BecaworkService.Controllers
         public async Task<IActionResult> Post(ElectrolyticTokenLog objETokenLog)
         {
             var eTokens = await _eTokenLogService.AddElectrolyticTokenLog(objETokenLog);
+            if (eTokens.Id == 0)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
             }
@@ -56,7 +57,7 @@ namespace BecaworkService.Controllers
 
         [HttpPut]
         [Route("UpdateElectrolyticTokenLog")]
-        public async Task<IActionResult> Put(ElectrolyticTokenLog objETokenLog)
+        public async Task<IActionResult> Update(ElectrolyticTokenLog objETokenLog)
         {
             await _eTokenLogService.AddElectrolyticTokenLog(objETokenLog);
             return Ok("Update ElectrolyticTokenLog Successfully");

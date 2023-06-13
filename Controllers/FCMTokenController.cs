@@ -58,7 +58,7 @@ namespace BecaworkService.Controllers
 
         [HttpPut]
         [Route("UpdateFCMToken")]
-        public async Task<IActionResult> Put(FCMToken objFCMToken)
+        public async Task<IActionResult> Update(FCMToken objFCMToken)
         {
             await _fCMTokenService.AddFCMToken(objFCMToken);
             return Ok("Update FCMToken Successfully");
