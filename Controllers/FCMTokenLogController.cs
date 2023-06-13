@@ -14,7 +14,7 @@ namespace BecaworkService.Controllers
     public class FCMTokenLogController : ControllerBase
     {
         public readonly IFCMTokenLogService _FCMTokenLogService;
-       /* private readonly HttpClient _httpClient;*/
+        /* private readonly HttpClient _httpClient;*/
 
         public FCMTokenLogController(IFCMTokenLogService FCMTokenService)
         {
@@ -46,19 +46,11 @@ namespace BecaworkService.Controllers
         public async Task<IActionResult> Post(FCMTokenLog objFCMTokenLog)
         {
             var tempFCMTokenLog = await _FCMTokenLogService.AddFCMTokenLog(objFCMTokenLog);
-            /*if (tempFCMTokenLog.Id == 0)
+            if (tempFCMTokenLog.Id == 0)
             {
-                var content = new FormUrlEncodedContent(new[]
-                {
-                new KeyValuePair<string,string>("ID", objFCMTokenLog.Id.ToString())
-                });
+                return StatusCode(StatusCodes.Status500InternalServerError, "Something Went Wrong");
 
-                var response = await _httpClient.PostAsync("https://service.vntts.vn/FcmToken/SendNotification", content);
-                if (!response.IsSuccessStatusCode)
-                {
-                    return Ok(content);
-                }
-            }*/
+            }
             return Ok("Added FCMTokenLog Successfully");
         }
 
