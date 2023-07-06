@@ -49,7 +49,19 @@ const AppLayout: FC<Props> = (props) => {
           />
         </Sider>
         <Layout className="site-layout">
+<<<<<<< Updated upstream
           <Content className="site-layout-background">{props.children}</Content>
+=======
+          <Content
+            className="site-layout-background"
+            style={{
+              minHeight: 280,
+              marginLeft: "20px",
+            }}
+          >
+            {props.children}
+          </Content>
+>>>>>>> Stashed changes
         </Layout>
       </Layout>
     </React.Fragment>

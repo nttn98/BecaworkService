@@ -9,9 +9,14 @@ import NotificationCreate from "./pages/Home/NotificationCreate";
 import NotificationEdit from "./pages/Home/NotificationEdit";
 import MailPage from "./pages/Mail/MailPage";
 import { MailDetailPage } from "./pages/Mail/MailDetailPage";
+<<<<<<< Updated upstream
 import { MailUpdatePage } from "./pages/Mail/MailUpdatePage";
 import { MailCreate } from "./pages/Mail/MailCreate";
 
+=======
+import NotificationDelete from "./pages/Home/NotificationDelete";
+import { useTranslation } from "react-i18next";
+>>>>>>> Stashed changes
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "/notification/edit/:id",
     element: <NotificationEdit />,
+  },
+  {
+    path: "/notification/delete/:id",
+    element: <NotificationDelete />,
   },
   {
     path: "mail",

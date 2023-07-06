@@ -9,48 +9,94 @@ a {
   color: #0366d6;
 }
 
+<<<<<<< Updated upstream
 .site-layout-background {
   overflow: auto;
 }
 
+=======
+>>>>>>> Stashed changes
 code {
   color: #e01a76;
 }
-
+.under-action {
+  margin-top: 20px;
+}
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 .showDetails {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 .title-details {
   font-weight: 700;
 }
-.ant-row {
+/* .ant-row {
   margin-top: 5px;
+} */
+.site-layout-background {
+  overflow: auto;
 }
-
-
+ant-layout-content {
+  margin: 0;
+  padding: 0;
+}
+.topFunction {
+  margin: 20px;
+}
+.under-link {
+  margin-top: 20px;
+}
 .divs {
   display: flex;
   width: 100%;
-justify-content: space-between;
+  justify-content: space-between;
   background: gray;
-
 }
 
-.divs > div{
+.divs > div {
   width: 100px;
 }
 
-.divs > div:nth-child(1) {
-  background: red;
+:where(.css-dev-only-do-not-override-1fviqcj).ant-pagination {
+  float: right;
+  padding-bottom: 15px;
 }
-.divs > div:nth-child(2) {
-  background: blue;
+.span_title {
+  margin-left: 20px;
+  margin-right: 10px;
 }
+.site-layout-background:not(.ant-table-wrapper) {
+  margin-left: 20px;
+  min-height: 280;
+}
+.ant-divider-horizontal {
+  margin: 11px 0;
+}
+.ant-table-tbody > tr:nth-child(even) {
+  background-color: #e5e4e4;
+}
+.ant-table-tbody > tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+/* .ant-table-cell.ant-table-column-sort:nth-child() {
+  background-color: #e5e4e4;
+}
+.ant-table-cell.ant-table-column-sort:nth-child(odd) {
+  background-color: #ffffff;
+} */
+
+.anticon {
+  font-size: 16px;
+}
+h1 {
+  margin: 0;
+  text-align: center;
+  color: #1938b1;
+}
+<<<<<<< Updated upstream
 .divs > div:nth-child(3) {
   background: yellow;
 }
@@ -63,3 +109,5 @@ justify-content: space-between;
 .detailPage{
   padding: 15px;
 }
+=======
+>>>>>>> Stashed changes

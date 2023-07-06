@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@types/react-select": "^5.0.1",
+    "dayjs": "^1.11.7",
+    "i18next": "^22.5.0",
+    "i18next-browser-languagedetector": "^7.0.2",
+    "i18next-http-backend": "^2.2.1",
+    "moment": "^2.29.4",
+    "react-i18next": "^12.3.1"
+  }
+}

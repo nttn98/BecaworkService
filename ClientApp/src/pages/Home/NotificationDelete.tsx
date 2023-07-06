@@ -1,48 +1,54 @@
-import { Button, Col, Divider, Row } from "antd";
+import { Alert, Button, Col, Divider, Popconfirm, Row, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { NotificationModel } from "../../models/NotificationModel";
-import dayjs from "dayjs";
 import axios from "axios";
-
+import dayjs from "dayjs";
 interface Props {
   notificationId?: number;
   refresh: any;
   handleCancel: any;
 }
 
-export default function NotificationDetails({
+export default function NotificationDelete({
   notificationId,
   refresh,
   handleCancel,
 }: Props) {
   const [data, setData] = useState<NotificationModel | undefined>();
+  const navigate = useNavigate();
   const formatDate = (date: string) => {
     return dayjs(date).format("DD/MM/YY HH:mm:ss");
   };
-
-  const fetchData = (notificationId: number) => {
+  const confirm = (
+    e: React.MouseEvent<HTMLElement, MouseEvent> | undefined
+  ) => {
     axios
-      .get(
-        `https://localhost:5001/api/Notification/GetNotificationByID/` +
-          notificationId
-      )
+      .delete(`api/Notification/DeleteNofiti?ID=` + notificationId)
+      .then(() => {
+        message.success("Delete Notification Successful");
+        refresh();
+        handleCancel();
+      });
+  };
+
+  const cancel = (e: React.MouseEvent<HTMLElement, MouseEvent> | undefined) => {
+    message.error("Canceled");
+  };
+
+  useEffect(() => {
+    axios
+      .get(`api/Notification/GetNotificationByID/` + notificationId)
       .then((res) => {
         if (res) {
           setData(res.data);
         }
       });
-  };
-
-  useEffect(() => {
-    if (notificationId) {
-      fetchData(notificationId);
-    }
-  }, [notificationId]);
+  }, []);
 
   return (
     <div>
-      <h1>Notification Details</h1>
+      <h1>Notification Delete</h1>
       <Divider />
       {data ? (
         <div className="showDetails">
@@ -61,9 +67,9 @@ export default function NotificationDetails({
           <Divider />
           <Row>
             <Col
-              className="title-details"
               xs={{ span: 5, offset: 1 }}
               lg={{ span: 6, offset: 2 }}
+              className="title-details"
             >
               Created Time
             </Col>
@@ -102,8 +108,7 @@ export default function NotificationDetails({
             <Col
               xs={{ span: 5, offset: 1 }}
               lg={{ span: 6, offset: 2 }}
-              className="title-details
-             "
+              className="title-details"
             >
               Is Read
             </Col>
@@ -117,7 +122,6 @@ export default function NotificationDetails({
               xs={{ span: 5, offset: 1 }}
               lg={{ span: 6, offset: 2 }}
               className="title-details"
-              span={6}
             >
               Email
             </Col>
@@ -131,7 +135,6 @@ export default function NotificationDetails({
               xs={{ span: 5, offset: 1 }}
               lg={{ span: 6, offset: 2 }}
               className="title-details"
-              span={6}
             >
               Last Modified
             </Col>
@@ -145,7 +148,6 @@ export default function NotificationDetails({
               xs={{ span: 5, offset: 1 }}
               lg={{ span: 6, offset: 2 }}
               className="title-details"
-              span={6}
             >
               From
             </Col>
@@ -159,7 +161,6 @@ export default function NotificationDetails({
               xs={{ span: 5, offset: 1 }}
               lg={{ span: 6, offset: 2 }}
               className="title-details"
-              span={6}
             >
               Url
             </Col>
@@ -173,7 +174,6 @@ export default function NotificationDetails({
               xs={{ span: 5, offset: 1 }}
               lg={{ span: 6, offset: 2 }}
               className="title-details"
-              span={6}
             >
               Is Seen
             </Col>
@@ -182,10 +182,25 @@ export default function NotificationDetails({
             </Col>
           </Row>
           <Divider />
+          <div className="under-action"></div>
         </div>
       ) : (
         <p>Not found</p>
       )}
+      <div className="under-action">
+        <Popconfirm
+          title="Delete notification"
+          description="Are you sure to delete this notification?"
+          onConfirm={confirm}
+          onCancel={cancel}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button type="primary" style={{ marginRight: "10px" }} danger>
+            Delete
+          </Button>
+        </Popconfirm>
+      </div>
     </div>
   );
 }

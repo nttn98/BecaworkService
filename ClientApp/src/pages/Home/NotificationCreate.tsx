@@ -1,14 +1,39 @@
-import { Button, Divider, Form, Input, InputNumber, Select } from "antd";
+import {
+  Button,
+  Divider,
+  Form,
+  Input,
+  Select,
+  message,
+  notification,
+} from "antd";
 import { DatePicker } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { NotificationModel } from "../../models/NotificationModel";
+import axios from "axios";
+import { useForm } from "antd/es/form/Form";
+interface Props {
+  refresh: any;
+  handleCancel: any;
+}
 
-export default function NotificationCreate() {
+export default function NotificationCreate({ refresh, handleCancel }: Props) {
+  const [form] = useForm();
+
+  const onFinish = (values: NotificationModel) => {
+    console.log(values);
+    axios.post("/api/Notification/AddNotifi", values).then(() => {
+      message.success("Create Notification Successful");
+      refresh();
+      handleCancel();
+      form.resetFields();
+    });
+  };
   return (
     <div className="container">
       <h1>Create Notification</h1>
       <Divider />
-
       <Form
         name="basic"
         labelCol={{
@@ -18,11 +43,13 @@ export default function NotificationCreate() {
           span: 16,
         }}
         style={{
-          maxWidth: 600,
+          maxWidth: 630,
         }}
         initialValues={{
           remember: true,
         }}
+        onFinish={onFinish}
+        form={form}
         autoComplete="off"
       >
         <Form.Item
@@ -36,7 +63,6 @@ export default function NotificationCreate() {
         >
           <DatePicker format="DD/MM/YYYY" style={{ width: "100%" }} />
         </Form.Item>
-
         <Form.Item
           label="Type"
           name="type"
@@ -49,7 +75,6 @@ export default function NotificationCreate() {
         >
           <Input />
         </Form.Item>
-
         <Form.Item
           label="Content"
           name="content"
@@ -62,9 +87,16 @@ export default function NotificationCreate() {
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Is Read" name="isRead">
+        <Form.Item
+          label="Is Read"
+          name="isRead"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <Select
-            defaultValue="No"
             style={{ width: "100%" }}
             options={[
               {
@@ -125,9 +157,16 @@ export default function NotificationCreate() {
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Is seen" name="isSeen">
+        <Form.Item
+          label="Is seen"
+          name="isSeen"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <Select
-            defaultValue="No"
             style={{ width: "100%" }}
             options={[
               {
@@ -150,7 +189,6 @@ export default function NotificationCreate() {
           <Button type="primary" htmlType="submit">
             Create
           </Button>
-          <Link to="/notification-page"> Back to list</Link>
         </Form.Item>
       </Form>
     </div>
